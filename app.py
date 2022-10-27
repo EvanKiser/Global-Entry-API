@@ -62,8 +62,6 @@ def add_user():
 def get_users():
     if request.method == 'GET':
         users = User.query.all()
-    for user in users:
-        print(user.email)
     user_json = [
         {user.id: {
             'email': user.email, 
@@ -87,5 +85,5 @@ def unsubscribe_user():
 
 if __name__ == '__main__':
     with app.app_context():
-        db.create_all()
-        # app.run()
+        # db.create_all()
+        app.run()
