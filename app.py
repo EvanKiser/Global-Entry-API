@@ -1,18 +1,22 @@
-from tokenize import String
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timedelta
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 app = Flask(__name__)
 
-ENV = 'dev'
+ENV = os.getenv("ENV")
+DB_URI = os.getenv("DB_URI")
 
 if ENV == 'dev':
     app.debug = True
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:aaaa@localhost/ge'
 else:
     app.debug = False
-    app.config['SQLALCHEMY_DATABASE_URI'] = ''
+    app.config['SQLALCHEMY_DATABASE_URI'] = DB_URI
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -26,7 +30,6 @@ class User(db.Model):
     locations = db.Column(db.ARRAY(db.Integer))
     start_date = db.Column(db.DateTime)
     end_date = db.Column(db.DateTime)
-    active = db.Column(db.Boolean)
 
     def __init__(self, email, phone, locations):
         self.email = email
@@ -34,7 +37,6 @@ class User(db.Model):
         self.locations = locations
         self.start_date = datetime.now()
         self.end_date = self.start_date + timedelta(days=28)
-        self.active = True
 
 @app.route('/user', methods = ['POST'])
 def add_user():
@@ -56,11 +58,34 @@ def add_user():
     resp.status_code = 200
     return resp
 
-@app.route("/locations", methods=["PUT"])
-def update_locations():
-    return
+@app.route('/user', methods = ['GET'])
+def get_users():
+    if request.method == 'GET':
+        users = User.query.all()
+    for user in users:
+        print(user.email)
+    user_json = [
+        {user.id: {
+            'email': user.email, 
+            'phone': user.phone, 
+            'locations': user.locations
+            }
+        } 
+        for user in users
+    ]
+    resp = jsonify(user_json)
+    resp.status_code = 200
+    return resp
+    
+
+@app.route('/user', methods = ['PUT'])
+def unsubscribe_user():
+    if request.method == 'PUT':
+        phone = request.body["phone"]
+        end_date = datetime.now()
+        db.session.query(User).filter(User.phone==phone)
 
 if __name__ == '__main__':
     with app.app_context():
-        # db.create_all()
-        app.run()
+        db.create_all()
+        # app.run()
