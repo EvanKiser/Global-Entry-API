@@ -56,13 +56,6 @@
     "state": "NY"
   },
   {
-    "id": 5022,
-    "name": "Buffalo-Ft. Erie Enrollment Center",
-    "locationCode": "0901",
-    "city": "FORT ERIE",
-    "state": "ON"
-  },
-  {
     "id": 5023,
     "name": "Detroit Enrollment Center Global Entry",
     "locationCode": "3801",
@@ -133,13 +126,6 @@
     "state": "AB"
   },
   {
-    "id": 5041,
-    "name": "Vancouver Urban Enrollment Center",
-    "locationCode": "7922",
-    "city": "VANCOUVER",
-    "state": "BC"
-  },
-  {
     "id": 5060,
     "name": "Warroad Enrollment Center ",
     "locationCode": "3423",
@@ -159,13 +145,6 @@
     "locationCode": "0106",
     "city": "Belleville",
     "state": "NB"
-  },
-  {
-    "id": 5120,
-    "name": "Sweetgrass NEXUS and FAST Enrollment Center",
-    "locationCode": "3310",
-    "city": "Sweetgrass",
-    "state": "MT"
   },
   {
     "id": 5140,
@@ -343,13 +322,6 @@
     "state": "ON"
   },
   {
-    "id": 6480,
-    "name": "U.s. Custom House - Bowling Green",
-    "locationCode": "4701",
-    "city": "NEW YORK",
-    "state": "NY"
-  },
-  {
     "id": 6840,
     "name": "Minneapolis - St. Paul Global Entry EC",
     "locationCode": "3501",
@@ -376,13 +348,6 @@
     "locationCode": "2605",
     "city": "Phoenix",
     "state": "AZ"
-  },
-  {
-    "id": 7480,
-    "name": "Houston Hobby Airport Enrollment Center",
-    "locationCode": "5309",
-    "city": "Houston",
-    "state": "TX"
   },
   {
     "id": 7520,
@@ -574,13 +539,6 @@
     "state": "OH"
   },
   {
-    "id": 11981,
-    "name": "Chicago Field Office Enrollment Center",
-    "locationCode": "3901",
-    "city": "CHICAGO",
-    "state": "IL"
-  },
-  {
     "id": 12021,
     "name": "St. Louis Enrollment Center",
     "locationCode": "4503",
@@ -679,13 +637,6 @@
     "state": "OH"
   },
   {
-    "id": 16248,
-    "name": "Treasure Coast International Airport",
-    "locationCode": "5204",
-    "city": "Fort Pierce",
-    "state": "FL"
-  },
-  {
     "id": 16251,
     "name": "Sweetgrass Global Entry Enrollment Center",
     "locationCode": "3310",
@@ -768,47 +719,5 @@
     "locationCode": "3411",
     "city": "Fargo",
     "state": "ND"
-  },
-  {
-    "id": 16482,
-    "name": "Grand Forks, ND Enrollment Event",
-    "locationCode": "3427",
-    "city": "Grand Forks",
-    "state": "ND"
-  },
-  {
-    "id": 16485,
-    "name": "SEAFO - Billings-Logan Airport GE Mobile Event",
-    "locationCode": "3310",
-    "city": "Billings",
-    "state": "MT"
-  },
-  {
-    "id": 16488,
-    "name": "SEAFO - Missoula International Airport",
-    "locationCode": "3310",
-    "city": "Missoula",
-    "state": "MT"
-  },
-  {
-    "id": 16515,
-    "name": "Fort Lauderdale International Airport Terminal",
-    "locationCode": "5210",
-    "city": "Fort Lauderdale ",
-    "state": "FL"
-  },
-  {
-    "id": 16519,
-    "name": "Champlain GE Only",
-    "locationCode": "0712",
-    "city": "Champlain",
-    "state": "NY"
-  },
-  {
-    "id": 16520,
-    "name": "Niagara Falls GE Only",
-    "locationCode": "0901",
-    "city": "Niagara Falls GE Only",
-    "state": "NY"
   }
 ]

@@ -1,9 +1,9 @@
-from flask import Flask, jsonify, request
-from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
+from flask import Flask, jsonify, request
+from flask_sqlalchemy import SQLAlchemy
+import json
 import os
-from locations import LOCATIONS
 from mutable import MutableList
 
 load_dotenv()
@@ -41,30 +41,29 @@ class Location(db.Model):
     __tablename__ = 'locations'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250))
-    code = db.Column(db.Integer)
     city = db.Column(db.String(50))
     state = db.Column(db.String(15))
     past_appts_24_hours = db.Column(MutableList.as_mutable(db.ARRAY(db.DateTime)))
 
-    def __init__(self, id, name, code, city, state, past_appts_24_hours):
+    def __init__(self, id, name, city, state, past_appts_24_hours):
         self.id = id
         self.name = name
-        self.code = code
         self.city = city
         self.state = state
         self.past_appts_24_hours = past_appts_24_hours
 
 @app.route('/location', methods = ['POST'])
 def add_all_locations():
+    with open('locations.json') as locations_path:
+        locations = json.load(locations_path)
     if request.method == 'POST':
-        for location in LOCATIONS:
-            id = location["id"]
+        for location in locations:
+            id = location["locationCode"]
             name = location["name"]
-            location_code = location["locationCode"]
             city = location["city"]
             state = location["state"]
             past_appts_24_hours = []
-            data = Location(id, name, location_code, city, state, past_appts_24_hours)
+            data = Location(id, name, city, state, past_appts_24_hours)
             db.session.add(data)
             db.session.commit() 
     resp = jsonify("sweet locations")
@@ -79,7 +78,6 @@ def get_locations():
             {   
                 "id": location.id,
                 "name": location.name,
-                'code': location.code, 
                 'city': location.city, 
                 'state': location.state,
                 'past_appts_24_hours': location.past_appts_24_hours,
