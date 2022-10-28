@@ -96,6 +96,14 @@ def get_locations():
 def get_location_by_id(id):
     if request.method == 'GET':
         location = Location.query.get(id)
+        location = {   
+                "id": location.id,
+                "name": location.name,
+                "code": location.code,
+                'city': location.city, 
+                'state': location.state,
+                'past_appts_24_hours': location.past_appts_24_hours,
+            }
     resp = jsonify(location)
     resp.status_code = 200
     return resp
