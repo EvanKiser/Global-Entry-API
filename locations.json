@@ -1,0 +1,814 @@
+[
+  {
+    "id": 5001,
+    "name": "Hidalgo Enrollment Center",
+    "locationCode": "2305",
+    "city": "Mission",
+    "state": "TX"
+  },
+  {
+    "id": 5002,
+    "name": "San Diego -Otay Mesa Enrollment Center",
+    "locationCode": "2506",
+    "city": "San Diego",
+    "state": "CA"
+  },
+  {
+    "id": 5003,
+    "name": "Brownsville Enrollment Center",
+    "locationCode": "2301",
+    "city": "Brownsville",
+    "state": "TX"
+  },
+  {
+    "id": 5004,
+    "name": "Laredo Enrollment Center",
+    "locationCode": "2304",
+    "city": "Laredo",
+    "state": "TX"
+  },
+  {
+    "id": 5005,
+    "name": "El Paso Enrollment Center",
+    "locationCode": "2401",
+    "city": "El Paso",
+    "state": "TX"
+  },
+  {
+    "id": 5006,
+    "name": "Calexico Enrollment Center",
+    "locationCode": "2507",
+    "city": "Calexico",
+    "state": "CA"
+  },
+  {
+    "id": 5007,
+    "name": "Nogales, AZ",
+    "locationCode": "2604",
+    "city": "NOGALES",
+    "state": "AZ"
+  },
+  {
+    "id": 5021,
+    "name": "Champlain Enrollment Center",
+    "locationCode": "0712",
+    "city": "Champlain",
+    "state": "NY"
+  },
+  {
+    "id": 5022,
+    "name": "Buffalo-Ft. Erie Enrollment Center",
+    "locationCode": "0901",
+    "city": "FORT ERIE",
+    "state": "ON"
+  },
+  {
+    "id": 5023,
+    "name": "Detroit Enrollment Center Global Entry",
+    "locationCode": "3801",
+    "city": "Detroit",
+    "state": "MI"
+  },
+  {
+    "id": 5024,
+    "name": "Port Huron Enrollment Center",
+    "locationCode": "3802",
+    "city": "Port Huron",
+    "state": "MI"
+  },
+  {
+    "id": 5025,
+    "name": "Ottawa International Airport",
+    "locationCode": "7929",
+    "city": "Ottawa",
+    "state": "ON"
+  },
+  {
+    "id": 5026,
+    "name": "Vancouver Enrollment Center",
+    "locationCode": "7922",
+    "city": "Richmond",
+    "state": "BC"
+  },
+  {
+    "id": 5027,
+    "name": "Toronto Enrollment Center",
+    "locationCode": "7926",
+    "city": "Mississauga",
+    "state": "ON"
+  },
+  {
+    "id": 5028,
+    "name": "Montreal Enrollment Center",
+    "locationCode": "7925",
+    "city": "Montreal",
+    "state": "QC"
+  },
+  {
+    "id": 5029,
+    "name": "Winnipeg Enrollment Center",
+    "locationCode": "7928",
+    "city": "Winnipeg",
+    "state": "MB"
+  },
+  {
+    "id": 5030,
+    "name": "Calgary Enrollment Center",
+    "locationCode": "7923",
+    "city": "Calgary",
+    "state": "AB"
+  },
+  {
+    "id": 5031,
+    "name": "Halifax Enrollment Center",
+    "locationCode": "7931",
+    "city": "Goffs",
+    "state": "NS"
+  },
+  {
+    "id": 5032,
+    "name": "Edmonton Enrollment Center",
+    "locationCode": "7924",
+    "city": "Edmonton",
+    "state": "AB"
+  },
+  {
+    "id": 5041,
+    "name": "Vancouver Urban Enrollment Center",
+    "locationCode": "7922",
+    "city": "VANCOUVER",
+    "state": "BC"
+  },
+  {
+    "id": 5060,
+    "name": "Warroad Enrollment Center ",
+    "locationCode": "3423",
+    "city": "Warroad",
+    "state": "MN"
+  },
+  {
+    "id": 5080,
+    "name": "Sault Ste Marie Enrollment Center",
+    "locationCode": "3803",
+    "city": "Sault Ste. Marie",
+    "state": "MI"
+  },
+  {
+    "id": 5101,
+    "name": "Houlton POE/Woodstock",
+    "locationCode": "0106",
+    "city": "Belleville",
+    "state": "NB"
+  },
+  {
+    "id": 5120,
+    "name": "Sweetgrass NEXUS and FAST Enrollment Center",
+    "locationCode": "3310",
+    "city": "Sweetgrass",
+    "state": "MT"
+  },
+  {
+    "id": 5140,
+    "name": "JFK International Global Entry EC",
+    "locationCode": "4701",
+    "city": "Jamaica",
+    "state": "NY"
+  },
+  {
+    "id": 5141,
+    "name": "Houston Intercontinental Global Entry EC",
+    "locationCode": "5309",
+    "city": "Houston",
+    "state": "TX"
+  },
+  {
+    "id": 5142,
+    "name": "Washington Dulles International Global Entry EC",
+    "locationCode": "5401",
+    "city": "Sterling ",
+    "state": "VA"
+  },
+  {
+    "id": 5161,
+    "name": "Niagara Falls Enrollment Center",
+    "locationCode": "0901",
+    "city": "NIAGARA FALLS",
+    "state": "NY"
+  },
+  {
+    "id": 5180,
+    "name": "Los Angeles International Global Entry EC",
+    "locationCode": "2720",
+    "city": "LOS ANGELES",
+    "state": "CA"
+  },
+  {
+    "id": 5181,
+    "name": "Miami International Airport",
+    "locationCode": "5206",
+    "city": "Miami",
+    "state": "FL"
+  },
+  {
+    "id": 5182,
+    "name": "Atlanta International Global Entry EC",
+    "locationCode": "1704",
+    "city": "Atlanta",
+    "state": "GA"
+  },
+  {
+    "id": 5183,
+    "name": "Chicago O'Hare International Global Entry EC ",
+    "locationCode": "3901",
+    "city": "CHICAGO",
+    "state": "IL"
+  },
+  {
+    "id": 5223,
+    "name": "Derby Line Enrollment Center",
+    "locationCode": "0209",
+    "city": "Derby Line",
+    "state": "VT"
+  },
+  {
+    "id": 5300,
+    "name": "Dallas-Fort Worth International Airport Global Entry",
+    "locationCode": "5501",
+    "city": "DFW Airport",
+    "state": "TX"
+  },
+  {
+    "id": 5320,
+    "name": "Detroit Metro Airport",
+    "locationCode": "3807",
+    "city": "Detroit",
+    "state": "MI"
+  },
+  {
+    "id": 5340,
+    "name": "Honolulu Enrollment Center",
+    "locationCode": "3205",
+    "city": "Honolulu",
+    "state": "HI"
+  },
+  {
+    "id": 5360,
+    "name": "Las Vegas Enrollment Center",
+    "locationCode": "2722",
+    "city": "Las Vegas",
+    "state": "NV"
+  },
+  {
+    "id": 5380,
+    "name": "Orlando International Airport",
+    "locationCode": "1808",
+    "city": "Orlando",
+    "state": "FL"
+  },
+  {
+    "id": 5400,
+    "name": "San Juan Global Entry Enrollment Center",
+    "locationCode": "4913",
+    "city": "Carolina",
+    "state": "PR"
+  },
+  {
+    "id": 5420,
+    "name": "Seatac International Airport Global Entry EC",
+    "locationCode": "3029",
+    "city": "SeaTac",
+    "state": "WA"
+  },
+  {
+    "id": 5441,
+    "name": "Boston-Logan Global Entry Enrollment Center",
+    "locationCode": "0401",
+    "city": "East Boston",
+    "state": "MA"
+  },
+  {
+    "id": 5443,
+    "name": "Fort Lauderdale Global Entry Enrollment Center",
+    "locationCode": "5210",
+    "city": "Ft Lauderdale",
+    "state": "FL"
+  },
+  {
+    "id": 5444,
+    "name": "Newark Liberty Intl Airport",
+    "locationCode": "4601",
+    "city": "Newark ",
+    "state": "NJ"
+  },
+  {
+    "id": 5445,
+    "name": "Philadelphia International Airport",
+    "locationCode": "1108",
+    "city": "PHILADELPHIA",
+    "state": "PA"
+  },
+  {
+    "id": 5446,
+    "name": "San Francisco Global Entry Enrollment Center",
+    "locationCode": "2818",
+    "city": "San Francisco",
+    "state": "CA"
+  },
+  {
+    "id": 5447,
+    "name": "Sanford Global Entry Enrollment Center",
+    "locationCode": "1809",
+    "city": "Sanford",
+    "state": "FL"
+  },
+  {
+    "id": 5460,
+    "name": "San Luis Enrollment Center",
+    "locationCode": "2608",
+    "city": "San Luis",
+    "state": "AZ"
+  },
+  {
+    "id": 5500,
+    "name": "Calais Enrollment Center",
+    "locationCode": "0115",
+    "city": "Calais",
+    "state": "ME"
+  },
+  {
+    "id": 5520,
+    "name": "Lansdowne, ON ",
+    "locationCode": "0708",
+    "city": "Lansdowne",
+    "state": "ON"
+  },
+  {
+    "id": 6480,
+    "name": "U.s. Custom House - Bowling Green",
+    "locationCode": "4701",
+    "city": "NEW YORK",
+    "state": "NY"
+  },
+  {
+    "id": 6840,
+    "name": "Minneapolis - St. Paul Global Entry EC",
+    "locationCode": "3501",
+    "city": "St. Paul",
+    "state": "MN"
+  },
+  {
+    "id": 6920,
+    "name": "Doha International Airport",
+    "locationCode": "9997",
+    "city": "Doha",
+    "state": ""
+  },
+  {
+    "id": 6940,
+    "name": "Denver International Airport",
+    "locationCode": "3307",
+    "city": "Denver",
+    "state": "CO"
+  },
+  {
+    "id": 7160,
+    "name": "Phoenix Sky Harbor Global Entry Enrollment Center",
+    "locationCode": "2605",
+    "city": "Phoenix",
+    "state": "AZ"
+  },
+  {
+    "id": 7480,
+    "name": "Houston Hobby Airport Enrollment Center",
+    "locationCode": "5309",
+    "city": "Houston",
+    "state": "TX"
+  },
+  {
+    "id": 7520,
+    "name": "San Antonio International Airport",
+    "locationCode": "5507",
+    "city": "San Antonio",
+    "state": "TX"
+  },
+  {
+    "id": 7540,
+    "name": "Anchorage Enrollment Center",
+    "locationCode": "3126",
+    "city": "Anchorage ",
+    "state": "AK"
+  },
+  {
+    "id": 7600,
+    "name": "Salt Lake City International Airport",
+    "locationCode": "3303",
+    "city": "Salt Lake City",
+    "state": "UT"
+  },
+  {
+    "id": 7680,
+    "name": "Cincinnati Enrollment Center",
+    "locationCode": "4102",
+    "city": "Erlanger",
+    "state": "KY"
+  },
+  {
+    "id": 7740,
+    "name": "Milwaukee Enrollment Center",
+    "locationCode": "3701",
+    "city": "Milwaukee",
+    "state": "WI"
+  },
+  {
+    "id": 7820,
+    "name": "Austin-Bergstrom International Airport",
+    "locationCode": "5506",
+    "city": "Austin",
+    "state": "TX"
+  },
+  {
+    "id": 7940,
+    "name": "Baltimore Washington Thurgood Marshall  Airport",
+    "locationCode": "1305",
+    "city": "Linthicum",
+    "state": "MD"
+  },
+  {
+    "id": 7960,
+    "name": "Portland, OR Enrollment Center",
+    "locationCode": "2904",
+    "city": "Portland",
+    "state": "OR"
+  },
+  {
+    "id": 8020,
+    "name": "Tampa Enrollment Center",
+    "locationCode": "1801",
+    "city": "Tampa",
+    "state": "FL"
+  },
+  {
+    "id": 8040,
+    "name": "Albuquerque Enrollment Center",
+    "locationCode": "2407",
+    "city": "Albuquerque",
+    "state": "NM"
+  },
+  {
+    "id": 8100,
+    "name": "Douglas Enrollment Center",
+    "locationCode": "2601",
+    "city": "Douglas",
+    "state": "AZ"
+  },
+  {
+    "id": 8120,
+    "name": "Washington, DC Enrollment Center",
+    "locationCode": "0000",
+    "city": "Washington",
+    "state": "DC"
+  },
+  {
+    "id": 8920,
+    "name": "Los Angeles -Long Beach Seaport ",
+    "locationCode": "2709",
+    "city": "Long Beach",
+    "state": "CA"
+  },
+  {
+    "id": 9040,
+    "name": "Singapore (Singapore, U.S. Embassy) ",
+    "locationCode": "9999",
+    "city": "Singapore",
+    "state": ""
+  },
+  {
+    "id": 9101,
+    "name": "Grand Portage",
+    "locationCode": "3613",
+    "city": "Grand Portage",
+    "state": "MN"
+  },
+  {
+    "id": 9140,
+    "name": "Guam International Airport",
+    "locationCode": "3207",
+    "city": "Tamuning",
+    "state": "GU"
+  },
+  {
+    "id": 9180,
+    "name": "Cleveland U.S. Customs and border protection",
+    "locationCode": "4101",
+    "city": "Middleburg Heights",
+    "state": "OH"
+  },
+  {
+    "id": 9200,
+    "name": "Pittsburgh International Airport",
+    "locationCode": "1104",
+    "city": "Pittsburgh",
+    "state": "PA"
+  },
+  {
+    "id": 9240,
+    "name": "Tucson Enrollment Center",
+    "locationCode": "2609",
+    "city": "Tucson",
+    "state": "AZ"
+  },
+  {
+    "id": 9260,
+    "name": "West Palm Beach Enrollment Center",
+    "locationCode": "5204",
+    "city": "Riviera Beach",
+    "state": "FL"
+  },
+  {
+    "id": 9300,
+    "name": "Warwick, RI Enrollment Center",
+    "locationCode": "0502",
+    "city": "Warwick",
+    "state": "RI"
+  },
+  {
+    "id": 9740,
+    "name": "New Orleans Enrollment Center",
+    "locationCode": "2002",
+    "city": "Kenner",
+    "state": "LA"
+  },
+  {
+    "id": 10260,
+    "name": "Nashville Enrollment Center",
+    "locationCode": "2007",
+    "city": "Nashville",
+    "state": "TN"
+  },
+  {
+    "id": 11000,
+    "name": "Moline Quad Cities International Airport",
+    "locationCode": "3908",
+    "city": "Moline",
+    "state": "IL"
+  },
+  {
+    "id": 11001,
+    "name": "Rockford-Chicago International Airport",
+    "locationCode": "3909",
+    "city": "Rockford",
+    "state": "IL"
+  },
+  {
+    "id": 11002,
+    "name": "Peoria international airport",
+    "locationCode": "3902",
+    "city": "Peoria",
+    "state": "IL"
+  },
+  {
+    "id": 11841,
+    "name": "Port Clinton, Ohio Enrollment Center",
+    "locationCode": "4105",
+    "city": "Port Clinton",
+    "state": "OH"
+  },
+  {
+    "id": 11981,
+    "name": "Chicago Field Office Enrollment Center",
+    "locationCode": "3901",
+    "city": "CHICAGO",
+    "state": "IL"
+  },
+  {
+    "id": 12021,
+    "name": "St. Louis Enrollment Center",
+    "locationCode": "4503",
+    "city": "St. Louis",
+    "state": "MO"
+  },
+  {
+    "id": 12161,
+    "name": "Boise Enrollment Center",
+    "locationCode": "2907",
+    "city": "Boise",
+    "state": "ID"
+  },
+  {
+    "id": 12781,
+    "name": "Kansas City Enrollment Center",
+    "locationCode": "4501",
+    "city": "Kansas City",
+    "state": "MO"
+  },
+  {
+    "id": 13321,
+    "name": "Blaine Global Entry Enrollment Center",
+    "locationCode": "3004",
+    "city": "Blaine",
+    "state": "WA"
+  },
+  {
+    "id": 13621,
+    "name": "Memphis Intl Airport Global Enrollment Center",
+    "locationCode": "2006",
+    "city": "Memphis",
+    "state": "TN"
+  },
+  {
+    "id": 14181,
+    "name": "International Falls Global Entry Enrollment Center",
+    "locationCode": "3604",
+    "city": "International Falls",
+    "state": "MN"
+  },
+  {
+    "id": 14321,
+    "name": "Charlotte-Douglas International Airport",
+    "locationCode": "1512",
+    "city": "Charlotte",
+    "state": "NC"
+  },
+  {
+    "id": 14381,
+    "name": "Fairbanks Enrollment Center",
+    "locationCode": "3111",
+    "city": "Fairbanks",
+    "state": "AK"
+  },
+  {
+    "id": 14481,
+    "name": "Gulfport-Biloxi Global Entry Enrollment Center",
+    "locationCode": "1902",
+    "city": "Gulfport",
+    "state": "MS"
+  },
+  {
+    "id": 14681,
+    "name": "Bradley International Airport Enrollment Center",
+    "locationCode": "0411",
+    "city": "Windsor Locks",
+    "state": "CT"
+  },
+  {
+    "id": 14981,
+    "name": "Richmond, VA Enrollment Center",
+    "locationCode": "1404",
+    "city": "Richmond",
+    "state": "VA"
+  },
+  {
+    "id": 15221,
+    "name": "Pembina Global Entry Enrollment Center",
+    "locationCode": "3401",
+    "city": "Pembina",
+    "state": "ND"
+  },
+  {
+    "id": 16226,
+    "name": "Eagle Pass ",
+    "locationCode": "2303",
+    "city": "Eagle Pass",
+    "state": "TX"
+  },
+  {
+    "id": 16242,
+    "name": "Dayton Enrollment Center",
+    "locationCode": "4104",
+    "city": "Vandalia",
+    "state": "OH"
+  },
+  {
+    "id": 16248,
+    "name": "Treasure Coast International Airport",
+    "locationCode": "5204",
+    "city": "Fort Pierce",
+    "state": "FL"
+  },
+  {
+    "id": 16251,
+    "name": "Sweetgrass Global Entry Enrollment Center",
+    "locationCode": "3310",
+    "city": "Sweetgrass",
+    "state": "MT"
+  },
+  {
+    "id": 16271,
+    "name": "Tri-cities Enrollment Center",
+    "locationCode": "2082",
+    "city": "Blountville",
+    "state": "TN"
+  },
+  {
+    "id": 16277,
+    "name": "Huntsville Global Entry Enrollment Center",
+    "locationCode": "1910",
+    "city": "Huntsville",
+    "state": "AL"
+  },
+  {
+    "id": 16278,
+    "name": "South Bend Enrollment Center",
+    "locationCode": "3986",
+    "city": "South Bend",
+    "state": "IN"
+  },
+  {
+    "id": 16280,
+    "name": "Grand Forks, ND enrollment Center",
+    "locationCode": "3427",
+    "city": "Grand Forks",
+    "state": "ND"
+  },
+  {
+    "id": 16282,
+    "name": "Mobile Regional Airport Enrollment Center",
+    "locationCode": "8888",
+    "city": "Mobile",
+    "state": "AL"
+  },
+  {
+    "id": 16460,
+    "name": "Del Rio Enrollment Center",
+    "locationCode": "2302",
+    "city": " Del Rio",
+    "state": "TX"
+  },
+  {
+    "id": 16461,
+    "name": "Des Moines GE Enrollment Center",
+    "locationCode": "3513",
+    "city": "Des Moines",
+    "state": "IA"
+  },
+  {
+    "id": 16463,
+    "name": "Springfield \u2013 Branson National Airport, MO",
+    "locationCode": "4505",
+    "city": "Springfield",
+    "state": "MO"
+  },
+  {
+    "id": 16467,
+    "name": "Omaha, NE Enrollment Center",
+    "locationCode": "3512",
+    "city": "Omaha",
+    "state": "NE"
+  },
+  {
+    "id": 16475,
+    "name": "SEAFO - Bozeman Airport",
+    "locationCode": "3386",
+    "city": "Belgrade",
+    "state": "MT"
+  },
+  {
+    "id": 16476,
+    "name": "SEAFO - FARGO Global Entry Workshop",
+    "locationCode": "3411",
+    "city": "Fargo",
+    "state": "ND"
+  },
+  {
+    "id": 16482,
+    "name": "Grand Forks, ND Enrollment Event",
+    "locationCode": "3427",
+    "city": "Grand Forks",
+    "state": "ND"
+  },
+  {
+    "id": 16485,
+    "name": "SEAFO - Billings-Logan Airport GE Mobile Event",
+    "locationCode": "3310",
+    "city": "Billings",
+    "state": "MT"
+  },
+  {
+    "id": 16488,
+    "name": "SEAFO - Missoula International Airport",
+    "locationCode": "3310",
+    "city": "Missoula",
+    "state": "MT"
+  },
+  {
+    "id": 16515,
+    "name": "Fort Lauderdale International Airport Terminal",
+    "locationCode": "5210",
+    "city": "Fort Lauderdale ",
+    "state": "FL"
+  },
+  {
+    "id": 16519,
+    "name": "Champlain GE Only",
+    "locationCode": "0712",
+    "city": "Champlain",
+    "state": "NY"
+  },
+  {
+    "id": 16520,
+    "name": "Niagara Falls GE Only",
+    "locationCode": "0901",
+    "city": "Niagara Falls GE Only",
+    "state": "NY"
+  }
+]
