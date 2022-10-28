@@ -83,6 +83,12 @@ def unsubscribe_user():
         end_date = datetime.now()
         db.session.query(User).filter(User.phone==phone)
 
+@app.route("/health")
+def index():
+    resp = jsonify("Hello world")
+    resp.status_code = 200
+    return resp
+
 if __name__ == '__main__':
     with app.app_context():
         # db.create_all()
