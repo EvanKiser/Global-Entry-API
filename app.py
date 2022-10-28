@@ -75,13 +75,15 @@ def get_users():
     resp.status_code = 200
     return resp
     
-
-@app.route('/user', methods = ['PUT'])
-def unsubscribe_user():
-    if request.method == 'PUT':
-        phone = request.body["phone"]
-        end_date = datetime.now()
-        db.session.query(User).filter(User.phone==phone)
+@app.route('/user/<id>', methods = ['DELETE'])
+def delete_user(id):
+    if request.method == 'DELETE':
+        user = User.query.get(id)
+        db.session.delete(user)
+        db.session.commit()
+    resp = jsonify(f"user id: '{id}' deleted")
+    resp.status_Code = 200
+    return resp
 
 @app.route("/health")
 def index():
