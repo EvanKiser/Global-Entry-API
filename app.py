@@ -3,6 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
 import os
+from locations import LOCATIONS
+from mutable import MutableList
 
 load_dotenv()
 
@@ -21,12 +23,91 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
+@app.route("/healthz")
+def healthz():
+    resp = jsonify("Healthz")
+    resp.status_code = 200
+    return resp
+
+@app.route("/")
+def home():
+    resp = jsonify("Home")
+    resp.status_code = 200
+    return resp
+
+##### LOCATION OPERATIONS #####
+
+class Location(db.Model):
+    __tablename__ = 'locations'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(250))
+    code = db.Column(db.Integer)
+    city = db.Column(db.String(50))
+    state = db.Column(db.String(15))
+    past_appts_24_hours = db.Column(MutableList.as_mutable(db.ARRAY(db.DateTime)))
+
+    def __init__(self, id, name, code, city, state, past_appts_24_hours):
+        self.id = id
+        self.name = name
+        self.code = code
+        self.city = city
+        self.state = state
+        self.past_appts_24_hours = past_appts_24_hours
+
+@app.route('/location', methods = ['POST'])
+def add_all_locations():
+    if request.method == 'POST':
+        for location in LOCATIONS:
+            id = location["id"]
+            name = location["name"]
+            location_code = location["locationCode"]
+            city = location["city"]
+            state = location["state"]
+            past_appts_24_hours = []
+            data = Location(id, name, location_code, city, state, past_appts_24_hours)
+            db.session.add(data)
+            db.session.commit() 
+    resp = jsonify("sweet locations")
+    resp.status_code = 200
+    return resp
+
+@app.route('/location', methods = ['GET'])
+def get_locations():
+    if request.method == 'GET':
+        locations = Location.query.all()
+        locations = [
+            {   
+                "id": location.id,
+                "name": location.name,
+                'code': location.code, 
+                'city': location.city, 
+                'state': location.state,
+                'past_appts_24_hours': location.past_appts_24_hours,
+            }
+            for location in locations
+        ]
+    resp = jsonify(locations)
+    resp.status_code = 200
+    return resp
+
+@app.route('/location/<id>', methods = ['PUT'])
+def update_location(id):
+    if request.method == 'PUT':
+        location = Location.query.get(id)
+        location.past_appts_24_hours.append(datetime.now())
+        db.session.commit()
+    resp = jsonify(f"location appts updated")
+    resp.status_Code = 200
+    return resp
+
+##### USER OPERATIONS #####
+ 
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(200))
     phone = db.Column(db.String(15))
-    locations = db.Column(db.ARRAY(db.Integer))
+    locations = db.Column(MutableList.as_mutable(db.ARRAY(db.Integer)))
     start_date = db.Column(db.DateTime)
     end_date = db.Column(db.DateTime)
 
@@ -61,15 +142,15 @@ def add_user():
 def get_users():
     if request.method == 'GET':
         users = User.query.all()
-    user_json = [
-        {user.id: {
-            'email': user.email, 
-            'phone': user.phone, 
-            'locations': user.locations
-            }
-        } 
-        for user in users
-    ]
+        user_json = [
+            {
+                'id': user.id,
+                'email': user.email, 
+                'phone': user.phone, 
+                'locations': user.locations
+            } 
+            for user in users
+        ]
     resp = jsonify(user_json)
     resp.status_code = 200
     return resp
@@ -82,18 +163,6 @@ def delete_user(id):
         db.session.commit()
     resp = jsonify(f"user id: '{id}' deleted")
     resp.status_Code = 200
-    return resp
-
-@app.route("/healthz")
-def healthz():
-    resp = jsonify("Healthz")
-    resp.status_code = 200
-    return resp
-
-@app.route("/")
-def home():
-    resp = jsonify("Home")
-    resp.status_code = 200
     return resp
 
 if __name__ == '__main__':
