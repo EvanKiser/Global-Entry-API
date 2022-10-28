@@ -85,9 +85,15 @@ def delete_user(id):
     resp.status_Code = 200
     return resp
 
-@app.route("/health")
-def index():
-    resp = jsonify("Hello world")
+@app.route("/healthz")
+def healthz():
+    resp = jsonify("Healthz")
+    resp.status_code = 200
+    return resp
+
+@app.route("/")
+def home():
+    resp = jsonify("Home")
     resp.status_code = 200
     return resp
 
