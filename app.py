@@ -9,15 +9,14 @@ load_dotenv()
 app = Flask(__name__)
 
 ENV = os.getenv("ENV")
-DB_URI = os.getenv("DB_URI")
+DB_URI = os.getenv("DB_URI") if ENV != 'dev' else 'postgresql://postgres:aaaa@localhost/ge'
 
 if ENV == 'dev':
     app.debug = True
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:aaaa@localhost/ge'
 else:
     app.debug = False
-    app.config['SQLALCHEMY_DATABASE_URI'] = DB_URI
 
+app.config['SQLALCHEMY_DATABASE_URI'] = DB_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
