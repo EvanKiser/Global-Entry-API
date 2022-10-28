@@ -24,17 +24,24 @@ def users_dict_to_locations_dict(users_dict):
                 locations_dict[location] = [user_phone_number]
     return locations_dict
 
+def send_text_message(appointment, phone_numbers):
+    message_content = f"New Global Entry Appointment Available in {appointment.city}, {appointment.state} at {appointment.timestamp}"
+    for phone_number in phone_numbers:
+        _ = client.messages \
+            .create(
+                body=message_content,
+                from_=TWILIO_PHONE_NUMBER,
+                to=phone_number
+            )
+    return
+
 if __name__ == '__main__':
     response = request.urlopen(f"{API_URL}/user")
     data = response.read()
     users_dict = json.loads(data)
     locations_dict = users_dict_to_locations_dict(users_dict)
     for location_id, phone_numbers in locations_dict.items():
-        appointments = check_for_appointments(location_id)
-        print(appointments)
-        for appt in appointments:
-            pass
-            #Send text about appointments
-        # CAN"T TEXT PPL THE SAME THING
-        #   check for new appts
-        #   send text about new appt if new appt found
+        new_appointments = check_for_appointments(location_id)
+        for appointment in new_appointments:
+            # update database obj with new appts
+            send_text_message(phone_numbers)
