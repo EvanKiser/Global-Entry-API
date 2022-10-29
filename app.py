@@ -75,6 +75,7 @@ def add_all_locations():
 
 @app.route('/location', methods = ['GET'])
 def get_locations():
+    Location.__table__.drop()
     if request.method == 'GET':
         locations = Location.query.all()
         locations = [
@@ -158,6 +159,7 @@ def add_user():
 
 @app.route('/user', methods = ['GET'])
 def get_users():
+    User.__tablename__.drop
     if request.method == 'GET':
         users = User.query.all()
         user_json = [
