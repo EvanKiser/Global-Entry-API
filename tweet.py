@@ -22,11 +22,9 @@ ACCESS_TOKEN_SECRET = os.getenv("TWITTER_ACCESS_TOKEN_SECRET")
 
 NOTIF_MESSAGE = 'New appointment slot open in {city}, {state} at {name}: {timestamp}'
 
-def add_tweeted_appointment_to_db(location_id, timestamp, past_appointments):
-    past_appointments.append(timestamp)
-    print(past_appointments)
+def add_tweeted_appointment_to_db(location_id, timestamp):
     requests.put(f"{API_URL}/location/{location_id}", \
-        json={'id': location_id,'past_appointments': past_appointments})
+        json={'id': location_id,'new_appointment': timestamp})
 
 def send_tweet(location_id, timestamp, past_appointments):
     auth = tweepy.OAuth1UserHandler(
@@ -75,5 +73,5 @@ if __name__ == '__main__':
                 continue
             timestamp = date.strftime(MESSAGE_TIME_FORMAT)
             if send_tweet(location, timestamp, past_appointments):
-                add_tweeted_appointment_to_db(location.id, timestamp, past_appointments)
+                add_tweeted_appointment_to_db(location.id, timestamp)
                 os._exit(1)

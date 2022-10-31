@@ -110,9 +110,10 @@ def get_location_by_id(id):
 
 @app.route('/location/<id>', methods = ['PUT'])
 def update_location(id):
+    new_appointment = request.json['new_appointment']
     if request.method == 'PUT':
         location = Location.query.get(id)
-        location.past_appointments = request.json['past_appointments']
+        location.past_appointments.append(new_appointment)
         db.session.commit()
     resp = jsonify(f"location appts updated")
     resp.status_Code = 200
