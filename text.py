@@ -30,17 +30,15 @@ def users_dict_to_locations_dict(users_dict):
     return locations_dict
 
 def add_sent_texts_to_db(users, message_content):
-    for user in users:
-        requests.put(f"{API_URL}/user/{user.id}", json={'id': user.id,'text_sent': message_content})
+    requests.put(f"{API_URL}/user/{user.id}", json={'id': user.id,'text_sent': message_content})
 
-def send_text_message(users, message_content):
-    for user in users:
-        _ = client.messages \
-            .create(
-                body=message_content,
-                from_=TWILIO_PHONE_NUMBER,
-                to=user.phone_number
-            )
+def send_text_message(user, message_content):
+    _ = client.messages \
+        .create(
+            body=message_content,
+            from_=TWILIO_PHONE_NUMBER,
+            to=user.phone_number
+        )
     return
 
 if __name__ == '__main__':
@@ -55,5 +53,5 @@ if __name__ == '__main__':
                 message_content = f"New Global Entry Appointment Available in {location.city}, {location.state} at {appointment.timestamp}"
                 for user in users:
                     if message_content not in user.texts_sent:
-                        send_text_message(users, message_content)
-                        add_sent_texts_to_db(users, message_content)
+                        send_text_message(user, message_content)
+                        add_sent_texts_to_db(user, message_content)
