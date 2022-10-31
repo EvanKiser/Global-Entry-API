@@ -75,4 +75,4 @@ if __name__ == '__main__':
             timestamp = date.strftime(MESSAGE_TIME_FORMAT)
             if send_tweet(location, timestamp, past_appointments):
                 add_tweeted_appointment_to_db(location.id, timestamp, past_appointments)
-                sys.exit(1)
+                os._exit(1)
