@@ -29,7 +29,6 @@ def check_for_appointments(location_id):
                                    end=end.strftime(TTP_TIME_FORMAT))
 
     try:
-        print(url)
         results = requests.get(url).json()  # List of flat appointment objects
     except requests.ConnectionError:
         logging.exception('Could not connect to scheduler API')

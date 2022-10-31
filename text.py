@@ -18,9 +18,9 @@ def users_dict_to_locations_dict(users_dict):
         user_phone_number = user["phone"]
         for location in user["locations"]:
             if location in locations_dict:
-                locations_dict[location].append(user_phone_number)
+                locations_dict[location].add(user_phone_number)
             else:
-                locations_dict[location] = [user_phone_number]
+                locations_dict[location] = set(user_phone_number)
     return locations_dict
 
 def add_appointments_to_db(new_appointments):
