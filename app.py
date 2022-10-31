@@ -44,15 +44,15 @@ class Location(db.Model):
     code = db.Column(db.Integer)
     city = db.Column(db.String(50))
     state = db.Column(db.String(15))
-    past_appts_24_hours = db.Column(MutableList.as_mutable(db.ARRAY(db.DateTime)))
+    past_appointments = db.Column(MutableList.as_mutable(db.ARRAY(db.DateTime)))
 
-    def __init__(self, id, name, code, city, state, past_appts_24_hours):
+    def __init__(self, id, name, code, city, state, past_appointments):
         self.id = id
         self.name = name
         self.code = code
         self.city = city
         self.state = state
-        self.past_appts_24_hours = past_appts_24_hours
+        self.past_appointments = past_appointments
 
 @app.route('/location', methods = ['POST'])
 def add_all_locations():
@@ -65,8 +65,8 @@ def add_all_locations():
             code = location["locationCode"]
             city = location["city"]
             state = location["state"]
-            past_appts_24_hours = []
-            data = Location(id, name, code, city, state, past_appts_24_hours)
+            past_appointments = []
+            data = Location(id, name, code, city, state, past_appointments)
             db.session.add(data)
             db.session.commit() 
     resp = jsonify("sweet locations")
@@ -84,7 +84,7 @@ def get_locations():
                 "code": location.code,
                 'city': location.city, 
                 'state': location.state,
-                'past_appts_24_hours': location.past_appts_24_hours,
+                'past_appointments': location.past_appointments,
             }
             for location in locations
         ]
@@ -102,7 +102,7 @@ def get_location_by_id(id):
                 "code": location.code,
                 'city': location.city, 
                 'state': location.state,
-                'past_appts_24_hours': location.past_appts_24_hours,
+                'past_appointments': location.past_appointments,
             }
     resp = jsonify(location)
     resp.status_code = 200
@@ -112,7 +112,7 @@ def get_location_by_id(id):
 def update_location(id):
     if request.method == 'PUT':
         location = Location.query.get(id)
-        location.past_appts_24_hours = request.json['past_appts_24_hours']
+        location.past_appointments = request.json['past_appointments']
         db.session.commit()
     resp = jsonify(f"location appts updated")
     resp.status_Code = 200

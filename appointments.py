@@ -42,7 +42,7 @@ def get_location_data(location_id):
                     location['code'], 
                     location['city'], 
                     location['state'],
-                    location['past_appts_24_hours']
+                    location['past_appointments']
                 )
 
 def format_past_appointments(past_appointments):
@@ -54,7 +54,7 @@ def format_ttp_date(timestamp):
 def check_for_appointments(location_id):
     results = get_appointments(location_id)
     location = get_location_data(location_id)
-    past_appts_24_hours = format_past_appointments(location.past_appts_24_hours)
+    past_appointments = format_past_appointments(location.past_appointments)
 
     new_appointments = []
     for result in results:
@@ -62,7 +62,7 @@ def check_for_appointments(location_id):
             date = format_ttp_date(result['timestamp'])
             timestamp = date.strftime(MESSAGE_TIME_FORMAT)
             # Check if we have seen this appointment in the last 24 hours
-            if date not in past_appts_24_hours:
+            if date not in past_appointments:
                 new_appt = Appointment(location, timestamp)
                 new_appointments.append(new_appt)
     return new_appointments

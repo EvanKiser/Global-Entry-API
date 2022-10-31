@@ -26,9 +26,9 @@ def users_dict_to_locations_dict(users_dict):
 def add_appointments_to_db(new_appointments):
     location = new_appointments[0].location
     for appointment in new_appointments:
-        location.past_appts_24_hours.append(appointment.timestamp)
+        location.past_appointments.append(appointment.timestamp)
     requests.put(f"{API_URL}/location/{location.id}", 
-        json={'id': location.id,'past_appts_24_hours': location.past_appts_24_hours})
+        json={'id': location.id,'past_appointments': location.past_appointments})
 
 def send_text_message(appointment, phone_numbers):
     location = appointment.location
