@@ -12,33 +12,34 @@ AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
 TWILIO_PHONE_NUMBER = os.getenv('TWILIO_PHONE_NUMBER')
 client = Client(ACCOUNT_SID, AUTH_TOKEN)
 
+class User():
+    def __init__(self, id, phone_number, texts_sent):
+        self.id = id
+        self.phone_number = phone_number
+        self.texts_sent = texts_sent
+
 def users_dict_to_locations_dict(users_dict):
     locations_dict = {}
     for user in users_dict:
-        user_phone_number = user["phone"]
+        user_obj = User(user["id"], user["phone"], user["texts_sent"])
         for location in user["locations"]:
             if location in locations_dict:
-                locations_dict[location].add(user_phone_number)
+                locations_dict[location].add(user_obj)
             else:
-                locations_dict[location] = {user_phone_number}
+                locations_dict[location] = {user_obj}
     return locations_dict
 
-def add_appointments_to_db(new_appointments):
-    location = new_appointments[0].location
-    for appointment in new_appointments:
-        location.past_appointments.append(appointment.timestamp)
-    requests.put(f"{API_URL}/location/{location.id}", 
-        json={'id': location.id,'past_appointments': location.past_appointments})
+def add_sent_texts_to_db(users, message_content):
+    for user in users:
+        requests.put(f"{API_URL}/user/{user.id}", json={'id': user.id,'text_sent': message_content})
 
-def send_text_message(appointment, phone_numbers):
-    location = appointment.location
-    message_content = f"New Global Entry Appointment Available in {location.city}, {location.state} at {appointment.timestamp}"
-    for phone_number in phone_numbers:
+def send_text_message(users, message_content):
+    for user in users:
         _ = client.messages \
             .create(
                 body=message_content,
                 from_=TWILIO_PHONE_NUMBER,
-                to=phone_number
+                to=user.phone_number
             )
     return
 
@@ -46,9 +47,13 @@ if __name__ == '__main__':
     response = requests.get(f"{API_URL}/user")
     users_dict = response.json()
     locations_dict = users_dict_to_locations_dict(users_dict)
-    for location_id, phone_numbers in locations_dict.items():
+    for location_id, users in locations_dict.items():
         new_appointments = check_for_appointments(location_id)
         if new_appointments != []:
+            location = new_appointments[0].location
             for appointment in new_appointments:
-                send_text_message(appointment, phone_numbers)
-            add_appointments_to_db(new_appointments)
+                message_content = f"New Global Entry Appointment Available in {location.city}, {location.state} at {appointment.timestamp}"
+                for user in users:
+                    if message_content not in user.texts_sent:
+                        send_text_message(users, message_content)
+                        add_sent_texts_to_db(users, message_content)

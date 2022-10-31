@@ -128,13 +128,15 @@ class User(db.Model):
     locations = db.Column(MutableList.as_mutable(db.ARRAY(db.Integer)))
     start_date = db.Column(db.DateTime)
     end_date = db.Column(db.DateTime)
+    texts_sent = db.Column(MutableList.as_mutable(db.ARRAY(db.String(200))))
 
-    def __init__(self, email, phone, locations):
+    def __init__(self, email, phone, locations, texts_sent=[]):
         self.email = email
         self.phone = phone
         self.locations = locations
         self.start_date = datetime.now()
-        self.end_date = self.start_date + timedelta(days=28)
+        self.end_date = self.start_date + timedelta(days=30)
+        self.texts_sent = texts_sent
 
 @app.route('/user', methods = ['POST'])
 def add_user():
@@ -165,14 +167,26 @@ def get_users():
                 'id': user.id,
                 'email': user.email, 
                 'phone': user.phone, 
-                'locations': user.locations
+                'locations': user.locations,
+                'texts_sent': user.texts_sent
             } 
             for user in users
         ]
     resp = jsonify(user_json)
     resp.status_code = 200
     return resp
-    
+
+@app.route('/user/<id>', methods = ['PUT'])
+def update_user(id):
+    new_text = request.json['text_sent']
+    if request.method == 'PUT':
+        user = User.query.get(id)
+        user.texts_sent.append(new_text)
+        db.session.commit()
+    resp = jsonify(f"texts sent updated")
+    resp.status_Code = 200
+    return resp
+
 @app.route('/user/<id>', methods = ['DELETE'])
 def delete_user(id):
     if request.method == 'DELETE':
