@@ -49,7 +49,8 @@ def send_tweet(location_id, timestamp, past_appointments):
     return True
 
 if __name__ == '__main__':
-    while True:
+    keep_running = True
+    while keep_running:
         with open('locations.json') as locations_path:
             locations = json.load(locations_path)
         random_location = locations[random.randint(0, len(locations)-1)]
@@ -74,4 +75,6 @@ if __name__ == '__main__':
             timestamp = date.strftime(MESSAGE_TIME_FORMAT)
             if send_tweet(location, timestamp, past_appointments):
                 add_tweeted_appointment_to_db(location.id, timestamp)
-                os._exit(1)
+                keep_running = False
+                break
+        
