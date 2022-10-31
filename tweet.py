@@ -24,6 +24,7 @@ NOTIF_MESSAGE = 'New appointment slot open in {city}, {state} at {name}: {timest
 
 def add_tweeted_appointment_to_db(location_id, timestamp, past_appointments):
     past_appointments.append(timestamp)
+    print(past_appointments)
     requests.put(f"{API_URL}/location/{location_id}", \
         json={'id': location_id,'past_appointments': past_appointments})
 
