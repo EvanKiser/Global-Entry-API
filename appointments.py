@@ -20,9 +20,9 @@ class Appointment:
         self.location = location
         self.timestamp = timestamp
 
-def check_for_appointments(location_id):
+def get_appointments(location_id, delta_weeks=6):
     start = datetime.now()
-    end = start + timedelta(weeks=6)
+    end = start + timedelta(weeks=delta_weeks)
 
     url = SCHEDULER_API_URL.format(location=location_id,
                                    start=start.strftime(TTP_TIME_FORMAT),
@@ -33,27 +33,33 @@ def check_for_appointments(location_id):
     except requests.ConnectionError:
         logging.exception('Could not connect to scheduler API')
         return
+    return results
 
-    
-    response = requests.get(f"{API_URL}/location/{location_id}")
-    location = response.json()
-    location = Location(location['id'], 
-                        location['name'], 
-                        location['code'], 
-                        location['city'], 
-                        location['state'],
-                        location['past_appts_24_hours']
-                    )
+def get_location_data(location_id):
+    location = requests.get(f"{API_URL}/location/{location_id}").json()
+    return Location(location['id'], 
+                    location['name'],
+                    location['code'], 
+                    location['city'], 
+                    location['state'],
+                    location['past_appts_24_hours']
+                )
 
-    past_appts_24_hours = []
-    for appointment in location.past_appts_24_hours:
-        past_appointment_time = datetime.strptime(appointment[:-4], POSTGRES_TIME_FORMAT)
-        past_appts_24_hours.append(past_appointment_time)
+def format_past_appointments(past_appointments):
+    return [datetime.strptime(appt[:-4], POSTGRES_TIME_FORMAT) for appt in past_appointments]
+
+def format_ttp_date(timestamp):
+    return datetime.strptime(timestamp, TTP_TIME_FORMAT)
+
+def check_for_appointments(location_id):
+    results = get_appointments(location_id)
+    location = get_location_data(location_id)
+    past_appts_24_hours = format_past_appointments(location.past_appts_24_hours)
 
     new_appointments = []
     for result in results:
         if result['active'] > 0:
-            date = datetime.strptime(result['timestamp'], TTP_TIME_FORMAT) 
+            date = format_ttp_date(result['timestamp'])
             timestamp = date.strftime(MESSAGE_TIME_FORMAT)
             # Check if we have seen this appointment in the last 24 hours
             if date not in past_appts_24_hours:

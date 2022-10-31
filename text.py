@@ -47,9 +47,8 @@ if __name__ == '__main__':
     users_dict = response.json()
     locations_dict = users_dict_to_locations_dict(users_dict)
     for location_id, phone_numbers in locations_dict.items():
-        print(phone_numbers)
         new_appointments = check_for_appointments(location_id)
         if new_appointments != []:
-            add_appointments_to_db(new_appointments)
             for appointment in new_appointments:
                 send_text_message(appointment, phone_numbers)
+            add_appointments_to_db(new_appointments)
