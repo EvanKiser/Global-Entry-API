@@ -112,7 +112,7 @@ def get_location_by_id(id):
 def update_location(id):
     if request.method == 'PUT':
         location = Location.query.get(id)
-        location.past_appts_24_hours.append(datetime.now())
+        location.past_appts_24_hours = request.json['past_appts_24_hours']
         db.session.commit()
     resp = jsonify(f"location appts updated")
     resp.status_Code = 200
@@ -186,4 +186,5 @@ def delete_user(id):
 if __name__ == '__main__':
     with app.app_context():
         # db.create_all()
+        # db.session.commit()
         app.run()

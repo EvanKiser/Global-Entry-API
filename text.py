@@ -1,5 +1,4 @@
-import json
-from urllib import request
+import requests
 from appointments import check_for_appointments
 from dotenv import load_dotenv
 import os
@@ -7,7 +6,7 @@ from twilio.rest import Client
 
 load_dotenv()
 
-API_URL = os.getenv("API_URL")
+API_URL = os.getenv("API_URL") if os.getenv("ENV") != 'dev' else 'http://127.0.0.1:5000'
 ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
 AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
 TWILIO_PHONE_NUMBER = os.getenv('TWILIO_PHONE_NUMBER')
@@ -24,8 +23,16 @@ def users_dict_to_locations_dict(users_dict):
                 locations_dict[location] = [user_phone_number]
     return locations_dict
 
+def add_appointments_to_db(new_appointments):
+    location = new_appointments[0].location
+    for appointment in new_appointments:
+        location.past_appts_24_hours.append(appointment.timestamp)
+    requests.put(f"{API_URL}/location/{location.id}", 
+        json={'id': location.id,'past_appts_24_hours': location.past_appts_24_hours})
+
 def send_text_message(appointment, phone_numbers):
-    message_content = f"New Global Entry Appointment Available in {appointment.city}, {appointment.state} at {appointment.timestamp}"
+    location = appointment.location
+    message_content = f"New Global Entry Appointment Available in {location.city}, {location.state} at {appointment.timestamp}"
     for phone_number in phone_numbers:
         _ = client.messages \
             .create(
@@ -36,12 +43,12 @@ def send_text_message(appointment, phone_numbers):
     return
 
 if __name__ == '__main__':
-    response = request.urlopen(f"{API_URL}/user")
-    data = response.read()
-    users_dict = json.loads(data)
+    response = requests.get(f"{API_URL}/user")
+    users_dict = response.json()
     locations_dict = users_dict_to_locations_dict(users_dict)
     for location_id, phone_numbers in locations_dict.items():
         new_appointments = check_for_appointments(location_id)
-        for appointment in new_appointments:
-            # update database obj with new appts
-            send_text_message(phone_numbers)
+        if new_appointments != []:
+            add_appointments_to_db(new_appointments)
+            for appointment in new_appointments:
+                send_text_message(appointment, phone_numbers)

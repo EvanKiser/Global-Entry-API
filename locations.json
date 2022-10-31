@@ -21,13 +21,6 @@
     "state": "TX"
   },
   {
-    "id": 5004,
-    "name": "Laredo Enrollment Center",
-    "locationCode": "2304",
-    "city": "Laredo",
-    "state": "TX"
-  },
-  {
     "id": 5005,
     "name": "El Paso Enrollment Center",
     "locationCode": "2401",
