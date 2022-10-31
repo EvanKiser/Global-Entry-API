@@ -20,7 +20,7 @@ def users_dict_to_locations_dict(users_dict):
             if location in locations_dict:
                 locations_dict[location].add(user_phone_number)
             else:
-                locations_dict[location] = set(user_phone_number)
+                locations_dict[location] = {user_phone_number}
     return locations_dict
 
 def add_appointments_to_db(new_appointments):
@@ -47,6 +47,7 @@ if __name__ == '__main__':
     users_dict = response.json()
     locations_dict = users_dict_to_locations_dict(users_dict)
     for location_id, phone_numbers in locations_dict.items():
+        print(phone_numbers)
         new_appointments = check_for_appointments(location_id)
         if new_appointments != []:
             add_appointments_to_db(new_appointments)
