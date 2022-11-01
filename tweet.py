@@ -41,7 +41,7 @@ def send_tweet(location_id, timestamp, past_appointments):
         logging.info(f"Tweeted: {tweet_msg}")
     except tweepy.errors.Forbidden as duplicate:
         print("Duplicate")
-        add_tweeted_appointment_to_db(location_id, timestamp, past_appointments)
+        add_tweeted_appointment_to_db(location_id, timestamp)
         return False
     except Exception as e:
         logging.exception(e)
