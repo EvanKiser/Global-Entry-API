@@ -162,6 +162,7 @@ class User(db.Model):
 
 @app.route('/user', methods = ['POST'])
 def add_user():
+    print(request.method)
     print(request.json)
     data = request.json['data']
     if request.method == 'POST':
