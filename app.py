@@ -6,6 +6,24 @@ import json
 import os
 from mutable import MutableList
 from text import send_text_message
+from twilio.rest import Client
+
+ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
+AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
+TWILIO_PHONE_NUMBER = os.getenv('TWILIO_PHONE_NUMBER')
+client = Client(ACCOUNT_SID, AUTH_TOKEN)
+def send_welcome_message(phone_number):
+    WELCOME_MSG = """
+        This is Global Entry Scanner. Thanks for signing up!
+        You will now recieve texts about new Global Entry interviews.
+        Simply text "STOP" at any time to unsubscribe.
+        """
+    return client.messages \
+        .create(
+            body=WELCOME_MSG,
+            from_=TWILIO_PHONE_NUMBER,
+            to=phone_number
+        )
 
 load_dotenv()
 
@@ -21,12 +39,6 @@ else:
 
 app.config['SQLALCHEMY_DATABASE_URI'] = DB_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-WELCOME_MSG = """
-This is Global Entry Scanner. Thanks for signing up!
-You will now recieve texts about new Global Entry interviews.
-Simply text "STOP" at any time to unsubscribe.
-"""
 
 db = SQLAlchemy(app)
 
