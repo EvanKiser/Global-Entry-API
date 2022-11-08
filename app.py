@@ -5,7 +5,6 @@ from flask_sqlalchemy import SQLAlchemy
 import json
 import os
 from mutable import MutableList
-from text import send_text_message
 from twilio.rest import Client
 
 ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
