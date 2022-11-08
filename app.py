@@ -13,8 +13,9 @@ ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
 AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
 TWILIO_PHONE_NUMBER = os.getenv('TWILIO_PHONE_NUMBER')
 client = Client(ACCOUNT_SID, AUTH_TOKEN)
+
 def send_welcome_message(phone_number):
-    WELCOME_MSG = """
+    WELCOME_MSG = f"""
         This is Global Entry Scanner. Thanks for signing up!
         You will now recieve texts about new Global Entry interviews.
         Simply text "STOP" at any time to unsubscribe.
@@ -164,11 +165,12 @@ def add_user():
     print(request.json)
     data = request.json['data']
     if request.method == 'POST':
+        # first_name = data['field:comp-la6ibvk5']
         email = data['field:comp-la6fcw1i']
         phone = data['field:comp-la6fcw2e2']
         location0 = data['field:comp-la6fcw4h']
-        location1 = request.form['location1']
-        location2 = request.form['location2']
+        location1 = data['field:comp-la6gjwjv']
+        location2 = request.form['field:comp-la6gk26t']
         locations = [location0]
         if location1 != '':
             locations.append(location1)
@@ -177,7 +179,7 @@ def add_user():
         data = User(email, phone, locations)
         db.session.add(data)
         db.session.commit()
-        send_text_message(phone, WELCOME_MSG)
+        send_welcome_message(phone)
     resp = jsonify("cool email")
     resp.status_code = 200
     return resp
