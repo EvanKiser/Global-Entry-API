@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 import json
 import os
 from mutable import MutableList
+from text import send_text_message
 
 load_dotenv()
 
@@ -20,6 +21,12 @@ else:
 
 app.config['SQLALCHEMY_DATABASE_URI'] = DB_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+WELCOME_MSG = """
+This is Global Entry Scanner. Thanks for signing up!
+You will now recieve texts about new Global Entry interviews.
+Simply text "STOP" at any time to unsubscribe.
+"""
 
 db = SQLAlchemy(app)
 
@@ -142,10 +149,11 @@ class User(db.Model):
 @app.route('/user', methods = ['POST'])
 def add_user():
     print(request.json)
+    data = request.json['data']
     if request.method == 'POST':
-        email = request.form['email']
-        phone = request.form['phone']
-        location0 = request.form['location0']
+        email = data['field:comp-la6fcw1i']
+        phone = data['field:comp-la6fcw2e2']
+        location0 = data['field:comp-la6fcw4h']
         location1 = request.form['location1']
         location2 = request.form['location2']
         locations = [location0]
@@ -155,7 +163,8 @@ def add_user():
             locations.append(location2)
         data = User(email, phone, locations)
         db.session.add(data)
-        db.session.commit() 
+        db.session.commit()
+        send_text_message(phone, WELCOME_MSG)
     resp = jsonify("cool email")
     resp.status_code = 200
     return resp
