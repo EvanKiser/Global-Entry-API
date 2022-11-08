@@ -141,6 +141,7 @@ class User(db.Model):
 
 @app.route('/user', methods = ['POST'])
 def add_user():
+    print(request.body)
     print(request.form)
     if request.method == 'POST':
         email = request.form['email']
