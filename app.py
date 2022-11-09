@@ -170,12 +170,12 @@ def add_user():
         email = data['field:comp-la6fcw1i']
         phone = data['field:comp-la6fcw2e2']
         location0 = data['field:comp-la6fcw4h']
-        location1 = data['field:comp-la6gjwjv']
-        location2 = request.form['field:comp-la6gk26t']
         locations = [location0]
-        if location1 != '':
+        if 'field:comp-la6gjwjv' in data and data['field:comp-la6gjwjv'] != 'None':
+            location1 = data['field:comp-la6gjwjv']
             locations.append(location1)
-        if location2 != '':
+        elif 'field:comp-la6gk26t' in data and data['field:comp-la6gk26t'] != 'None':
+            location2 = data['field:comp-la6gk26t']
             locations.append(location2)
         data = User(email, phone, locations)
         db.session.add(data)
