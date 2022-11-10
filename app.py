@@ -27,7 +27,12 @@ def send_welcome_message(phone_number):
             to=phone_number
         )
 
-load_dotenv()
+def map_location_names_to_ids(location_name):
+    with open('locations.json') as locations_path:
+        locations = json.load(locations_path)
+    for location in locations:
+        if location["display_name"]:
+            return location["id"]
 
 app = Flask(__name__)
 
@@ -169,13 +174,13 @@ def add_user():
         email = data['field:comp-la6fcw1i']
         phone = data['field:comp-la6fcw2e2']
         location0 = data['field:comp-la6fcw4h']
-        locations = [location0]
+        locations = [map_location_names_to_ids(location0)]
         if 'field:comp-la6gjwjv' in data and data['field:comp-la6gjwjv'] != 'None':
             location1 = data['field:comp-la6gjwjv']
-            locations.append(location1)
+            locations.append(map_location_names_to_ids(location1))
         elif 'field:comp-la6gk26t' in data and data['field:comp-la6gk26t'] != 'None':
             location2 = data['field:comp-la6gk26t']
-            locations.append(location2)
+            locations.append(map_location_names_to_ids(location2))
         data = User(email, phone, locations)
         db.session.add(data)
         db.session.commit()
