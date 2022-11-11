@@ -80,7 +80,7 @@ if __name__ == '__main__':
             if date in past_appointments:
                 continue
             timestamp = date.strftime(MESSAGE_TIME_FORMAT)
-            if send_tweet(location, timestamp, past_appointments):
+            if send_tweet(location.id, timestamp):
                 add_tweeted_appointment_to_db(location.id, timestamp)
                 keep_running = False
                 break
