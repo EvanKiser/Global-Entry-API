@@ -20,20 +20,27 @@ API_KEY_SECRET = os.getenv("TWITTER_API_SECRET")
 ACCESS_TOKEN = os.getenv("TWITTER_ACCESS_TOKEN")
 ACCESS_TOKEN_SECRET = os.getenv("TWITTER_ACCESS_TOKEN_SECRET")
 
-NOTIF_MESSAGE = 'New appointment slot open in {city}, {state} at {name}: {timestamp}'
+NOTIF_MESSAGE = 'New appointment slot open in {display_name}: {timestamp}\n\nSignup for text message updates for specific locations here www.globalentryscanner.com'
 
 def add_tweeted_appointment_to_db(location_id, timestamp):
     requests.put(f"{API_URL}/location/{location_id}", \
         json={'id': location_id,'new_appointment': timestamp})
 
-def send_tweet(location_id, timestamp, past_appointments):
+def get_location_display_name(location_id):
+    with open('locations.json') as locations_path:
+        locations = json.load(locations_path)
+    for location in locations:
+        if location["id"] == location_id:
+            return location["display_name"]
+
+def send_tweet(location_id, timestamp):
     auth = tweepy.OAuth1UserHandler(
             API_KEY, API_KEY_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET
         )
     api = tweepy.API(auth, wait_on_rate_limit=True)
 
     tweet_msg = NOTIF_MESSAGE.format(
-        city=location.city, state=location.state, name=location.name, timestamp=timestamp
+        display_name=get_location_display_name(location_id), timestamp=timestamp
     )
 
     try:

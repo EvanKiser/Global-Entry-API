@@ -16,9 +16,7 @@ client = Client(ACCOUNT_SID, AUTH_TOKEN)
 
 def send_welcome_message(phone_number):
     WELCOME_MSG = f"""
-        This is Global Entry Scanner. Thanks for signing up!
-        You will now recieve texts about new Global Entry interviews.
-        Simply text "STOP" at any time to unsubscribe.
+        This is Global Entry Scanner. Thanks for signing up! You will now recieve texts about new Global Entry interviews. Simply text "STOP" at any time to unsubscribe.
         """
     return client.messages \
         .create(
@@ -31,7 +29,7 @@ def map_location_names_to_ids(location_name):
     with open('locations.json') as locations_path:
         locations = json.load(locations_path)
     for location in locations:
-        if location["display_name"]:
+        if location["display_name"] == location_name:
             return location["id"]
 
 app = Flask(__name__)
