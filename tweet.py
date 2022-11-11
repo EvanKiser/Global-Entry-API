@@ -20,7 +20,7 @@ API_KEY_SECRET = os.getenv("TWITTER_API_SECRET")
 ACCESS_TOKEN = os.getenv("TWITTER_ACCESS_TOKEN")
 ACCESS_TOKEN_SECRET = os.getenv("TWITTER_ACCESS_TOKEN_SECRET")
 
-NOTIF_MESSAGE = 'New appointment slot open in {display_name}: {timestamp}\n\nSignup for text message updates for specific locations here www.globalentryscanner.com'
+NOTIF_MESSAGE = 'New Global Entry interview appointment slot open in {display_name}: {timestamp}\n\nSignup at tinyurl.com/globalentryscan to recieve text message updates as soon as cancelled Global Entry interview appointments become available.'
 
 def add_tweeted_appointment_to_db(location_id, timestamp):
     requests.put(f"{API_URL}/location/{location_id}", \
