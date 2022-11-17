@@ -176,7 +176,7 @@ def add_user():
         if 'field:comp-la6gjwjv' in data and data['field:comp-la6gjwjv'] != 'None':
             location1 = data['field:comp-la6gjwjv']
             locations.append(map_location_names_to_ids(location1))
-        elif 'field:comp-la6gk26t' in data and data['field:comp-la6gk26t'] != 'None':
+        if 'field:comp-la6gk26t' in data and data['field:comp-la6gk26t'] != 'None':
             location2 = data['field:comp-la6gk26t']
             locations.append(map_location_names_to_ids(location2))
         data = User(email, phone, locations)

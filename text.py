@@ -29,7 +29,7 @@ def users_dict_to_locations_dict(users_dict):
                 locations_dict[location] = {user_obj}
     return locations_dict
 
-def add_sent_texts_to_db(users, message_content):
+def add_sent_texts_to_db(message_content):
     requests.put(f"{API_URL}/user/{user.id}", json={'id': user.id,'text_sent': message_content})
 
 def send_text_message(user, message_content):
@@ -54,4 +54,4 @@ if __name__ == '__main__':
                 for user in users:
                     if message_content not in user.texts_sent:
                         send_text_message(user, message_content)
-                        add_sent_texts_to_db(user, message_content)
+                        add_sent_texts_to_db(message_content)
