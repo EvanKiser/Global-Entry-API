@@ -182,7 +182,7 @@ def add_user():
         data = User(email, phone, locations)
         db.session.add(data)
         db.session.commit()
-        # send_welcome_message(phone)
+        send_welcome_message(phone)
     resp = jsonify("cool email")
     resp.status_code = 200
     return resp
