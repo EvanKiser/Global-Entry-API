@@ -171,7 +171,7 @@ class User(db.Model):
         self.phone = phone
         self.locations = locations
         self.start_date = datetime.now()
-        self.end_date = self.start_date + timedelta(days=30)
+        self.end_date = self.start_date + timedelta(days=-1)
         self.texts_sent = texts_sent
 
 @app.route('/user', methods = ['POST'])
