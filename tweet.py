@@ -62,7 +62,6 @@ if __name__ == '__main__':
             locations = json.load(locations_path)
         random_location = locations[random.randint(0, len(locations)-1)]
         random_location_id = random_location["id"]
-        print(random_location_id)
         appointments = get_appointments(random_location_id, 8)
         if appointments == []:
             continue 
@@ -70,7 +69,6 @@ if __name__ == '__main__':
 
         # cast past appointments into datetime format
         past_appointments = format_past_appointments(location.past_appointments)
-        print('past_appointments', past_appointments)
 
         for appointment in appointments:
             if appointment['active'] <= 0:

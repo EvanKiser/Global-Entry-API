@@ -226,6 +226,13 @@ def delete_user(id):
     resp.status_Code = 200
     return resp
 
+##### STOP TEXTS #####
+@app.route('stop', methods = ['POST']) 
+def stop_texts():
+    print(request.json)
+    print(request.body)
+    if request.method == 'POST':
+        print("here")
 if __name__ == '__main__':
     with app.app_context():
         # db.create_all()
