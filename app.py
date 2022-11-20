@@ -25,6 +25,17 @@ def send_welcome_message(phone_number):
             to=phone_number
         )
 
+def send_exit_message(phone_number):
+    EXIT_MSG = f"""
+        You have successfully been unsubscribed!
+        """
+    return client.messages \
+        .create(
+            body=EXIT_MSG,
+            from_=TWILIO_PHONE_NUMBER,
+            to=phone_number
+        )
+
 def map_location_names_to_ids(location_name):
     with open('locations.json') as locations_path:
         locations = json.load(locations_path)
@@ -188,14 +199,37 @@ def add_user():
     return resp
 
 @app.route('/user', methods = ['GET'])
-def get_users():
+def get_current_users():
+    if request.method == 'GET':
+        users = User.query.filter(User.end_date > datetime.now())
+        user_json = [
+            {
+                'id': user.id,
+                'email': user.email, 
+                'phone': user.phone,
+                'start_date': user.start_date,
+                'end_date': user.end_date,
+                'locations': user.locations,
+                'texts_sent': user.texts_sent
+
+            } 
+            for user in users
+        ]
+    resp = jsonify(user_json)
+    resp.status_code = 200
+    return resp
+
+@app.route('/user/all', methods = ['GET'])
+def get_all_users():
     if request.method == 'GET':
         users = User.query.all()
         user_json = [
             {
                 'id': user.id,
                 'email': user.email, 
-                'phone': user.phone, 
+                'phone': user.phone,
+                'start_date': user.start_date,
+                'end_date': user.end_date,
                 'locations': user.locations,
                 'texts_sent': user.texts_sent
             } 
@@ -231,8 +265,17 @@ def delete_user(id):
 def stop_texts():
     print(request.json)
     print(request.body)
+    data = request.json['data']
     if request.method == 'POST':
-        print("here")
+        phone_number = data["phone_number"]
+        user = User.query.filter_by(phone=phone_number).first()
+        user.end_date = datetime.now()
+        db.session.commit()
+        send_exit_message(phone_number)
+    resp = jsonify(f"user id: {user.id} no longer receving texts")
+    resp.status_Code = 200
+    return resp
+        
 if __name__ == '__main__':
     with app.app_context():
         # db.create_all()
