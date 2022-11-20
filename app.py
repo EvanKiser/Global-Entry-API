@@ -25,17 +25,6 @@ def send_welcome_message(phone_number):
             to=phone_number
         )
 
-def send_exit_message(phone_number):
-    EXIT_MSG = f"""
-        You have successfully been unsubscribed!
-        """
-    return client.messages \
-        .create(
-            body=EXIT_MSG,
-            from_=TWILIO_PHONE_NUMBER,
-            to=phone_number
-        )
-
 def map_location_names_to_ids(location_name):
     with open('locations.json') as locations_path:
         locations = json.load(locations_path)
@@ -276,7 +265,6 @@ def stop_texts():
         user = User.query.filter_by(phone=phone_number).first()
         user.end_date = datetime.now()
         db.session.commit()
-        send_exit_message(phone_number)
     resp = jsonify(f"user id: {user.id} no longer receving texts")
     resp.status_Code = 200
     return resp
