@@ -227,7 +227,7 @@ def delete_user(id):
     return resp
 
 ##### STOP TEXTS #####
-@app.route('stop', methods = ['POST']) 
+@app.route('/stop', methods = ['POST']) 
 def stop_texts():
     print(request.json)
     print(request.body)
