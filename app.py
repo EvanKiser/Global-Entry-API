@@ -273,9 +273,7 @@ def stop_texts():
             resp.status_Code = 400
             return resp
         phone_number = '(' + phone[:2] + ') ' + phone[2:]
-        print(phone_number)
         user = User.query.filter_by(phone=phone_number).first()
-        print("user found: ", user.email)
         user.end_date = datetime.now()
         db.session.commit()
         send_exit_message(phone_number)
