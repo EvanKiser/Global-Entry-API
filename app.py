@@ -263,7 +263,7 @@ def delete_user(id):
 ##### STOP TEXTS #####
 @app.route('/stop', methods = ['POST']) 
 def stop_texts():
-    print(request.json)
+    print(request.values)
     data = request.json['data']
     if request.method == 'POST':
         phone_number = data["phone_number"]
