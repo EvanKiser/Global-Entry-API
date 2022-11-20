@@ -263,11 +263,18 @@ def delete_user(id):
 ##### STOP TEXTS #####
 @app.route('/stop', methods = ['POST']) 
 def stop_texts():
-    print(request.values)
-    data = request.json['data']
+    print(request.values.get('Body'))
+    data = request.values
     if request.method == 'POST':
-        phone_number = data["phone_number"]
+        phone_number = data.get('From', None)
+        body = data.get('Body', None).upper()
+        print(body, phone_number)
+        if body != "STOP":
+            resp = jsonify(f"Not a correct text body.")
+            resp.status_Code = 400
+            return resp
         user = User.query.filter_by(phone=phone_number).first()
+        print("user found: ", user.email)
         user.end_date = datetime.now()
         db.session.commit()
         send_exit_message(phone_number)
