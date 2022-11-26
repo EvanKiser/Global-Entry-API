@@ -92,7 +92,7 @@ def add_all_locations():
             past_appointments = []
             data = Location(id, name, code, city, state, past_appointments)
             db.session.add(data)
-            db.session.commit() 
+            db.session.commit()
     resp = jsonify("sweet locations")
     resp.status_code = 200
     return resp
