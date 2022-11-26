@@ -61,7 +61,6 @@ if __name__ == '__main__':
     Reminder to text "STOP" when you have booked an appointment in order to stop receiving text messages
     '''
     for user in users_dict:
-        print(user)
         if current_day%3==0 and user['texts_sent_today'] == 0:
             send_text_message(user, REMINDER_MSG)
 
@@ -73,6 +72,8 @@ if __name__ == '__main__':
             for appointment in new_appointments:
                 message_content = f"New Global Entry Appointment Available in {location.city}, {location.state} at {appointment.timestamp}"
                 for user in users:
+                    print(user.texts_sent_today)
                     if (user.texts_sent_today < 25) and (message_content not in user.texts_sent):
                         send_text_message(user, message_content)
-                        print(user.texts_sent_today)
+                        user.texts_sent_today += 1
+                        print("message sent")
