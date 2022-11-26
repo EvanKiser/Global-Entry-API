@@ -36,7 +36,7 @@ app = Flask(__name__)
 
 ENV = os.getenv("ENV")
 DB_URI = os.getenv("DB_URI") if ENV != 'dev' else 'postgresql://postgres:aaaa@localhost/ge'
-print(DB_URI)
+
 if ENV == 'dev':
     app.debug = True
 else:
@@ -286,6 +286,6 @@ def stop_texts():
         
 if __name__ == '__main__':
     with app.app_context():
-        db.create_all()
-        db.session.commit()
-        # app.run()
+        # db.create_all()
+        # db.session.commit()
+        app.run()
