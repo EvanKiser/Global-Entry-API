@@ -34,12 +34,12 @@ def users_dict_to_locations_dict(users_dict):
 def add_sent_texts_to_db(message_content):
     requests.put(f"{API_URL}/user/{user.id}", json={'id': user.id,'text_sent': message_content})
 
-def send_text_message(user, message_content):
+def send_text_message(phone_number, message_content):
     _ = client.messages \
         .create(
             body=message_content,
             from_=TWILIO_PHONE_NUMBER,
-            to=user.phone_number
+            to=phone_number
         )
     add_sent_texts_to_db(message_content)
     return
@@ -63,7 +63,7 @@ if __name__ == '__main__':
     for user in users_dict:
         print(current_day)
         if (user['texts_sent_today'] == 1):
-            send_text_message(user, REMINDER_MSG)
+            send_text_message(user['phone'], REMINDER_MSG)
 
     locations_dict = users_dict_to_locations_dict(users_dict)
     for location_id, users in locations_dict.items():
@@ -74,5 +74,5 @@ if __name__ == '__main__':
                 message_content = f"New Global Entry Appointment Available in {location.city}, {location.state} at {appointment.timestamp}"
                 for user in users:
                     if (user.texts_sent_today < 25) and (message_content not in user.texts_sent):
-                        send_text_message(user, message_content)
+                        send_text_message(user.phone_number, message_content)
                         user.texts_sent_today += 1
