@@ -161,7 +161,7 @@ class User(db.Model):
         self.phone = phone
         self.locations = locations
         self.start_date = datetime.now()
-        self.end_date = self.start_date + timedelta(days=21)
+        self.end_date = self.start_date + timedelta(days=22)
         self.texts_sent = texts_sent
         self.texts_sent_today = 1
 
@@ -244,7 +244,7 @@ def update_user(id):
     return resp
 
 @app.route('/user/reset', methods = ['PUT'])
-def reset_texts_per_day(id):
+def reset_texts_per_day():
     if request.method == 'PUT':
         users = User.query.filter(User.end_date > datetime.now())
         for user in users:
