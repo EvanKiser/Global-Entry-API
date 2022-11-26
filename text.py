@@ -71,6 +71,6 @@ if __name__ == '__main__':
             for appointment in new_appointments:
                 message_content = f"New Global Entry Appointment Available in {location.city}, {location.state} at {appointment.timestamp}"
                 for user in users:
-                    if (user.text_sents_today < 25) and (message_content not in user.texts_sent):
+                    if (user.texts_sent_today < 25) and (message_content not in user.texts_sent):
                         send_text_message(user, message_content)
                         print(user.text_sent_today)
