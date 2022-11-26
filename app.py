@@ -36,7 +36,7 @@ app = Flask(__name__)
 
 ENV = os.getenv("ENV")
 DB_URI = os.getenv("DB_URI") if ENV != 'dev' else 'postgresql://postgres:aaaa@localhost/ge'
-
+print(DB_URI)
 if ENV == 'dev':
     app.debug = True
 else:
@@ -154,6 +154,7 @@ class User(db.Model):
     start_date = db.Column(db.DateTime)
     end_date = db.Column(db.DateTime)
     texts_sent = db.Column(MutableList.as_mutable(db.ARRAY(db.String(200))))
+    texts_sent_today = db.Column(db.Integer)
 
     def __init__(self, email, phone, locations, texts_sent=[]):
         self.email = email
@@ -162,6 +163,7 @@ class User(db.Model):
         self.start_date = datetime.now()
         self.end_date = self.start_date + timedelta(days=30)
         self.texts_sent = texts_sent
+        self.texts_sent_today = 1
 
 @app.route('/user', methods = ['POST'])
 def add_user():
@@ -182,7 +184,7 @@ def add_user():
         data = User(email, phone, locations)
         db.session.add(data)
         db.session.commit()
-        send_welcome_message(phone)
+        # send_welcome_message(phone)
     resp = jsonify("cool email")
     resp.status_code = 200
     return resp
@@ -199,8 +201,8 @@ def get_current_users():
                 'start_date': user.start_date,
                 'end_date': user.end_date,
                 'locations': user.locations,
-                'texts_sent': user.texts_sent
-
+                'texts_sent': user.texts_sent,
+                'texts_sent_today': user.texts_sent_today
             } 
             for user in users
         ]
@@ -220,7 +222,8 @@ def get_all_users():
                 'start_date': user.start_date,
                 'end_date': user.end_date,
                 'locations': user.locations,
-                'texts_sent': user.texts_sent
+                'texts_sent': user.texts_sent,
+                'texts_sent_today': user.texts_sent_today
             } 
             for user in users
         ]
@@ -234,8 +237,20 @@ def update_user(id):
     if request.method == 'PUT':
         user = User.query.get(id)
         user.texts_sent.append(new_text)
+        user.texts_sent_today += 1
         db.session.commit()
     resp = jsonify(f"texts sent updated")
+    resp.status_Code = 200
+    return resp
+
+@app.route('/user/reset', methods = ['PUT'])
+def reset_texts_per_day(id):
+    if request.method == 'PUT':
+        users = User.query.filter(User.end_date > datetime.now())
+        for user in users:
+            user.texts_sent_today = 0
+        db.session.commit()
+    resp = jsonify(f"number of texts sent updated")
     resp.status_Code = 200
     return resp
 
@@ -271,6 +286,6 @@ def stop_texts():
         
 if __name__ == '__main__':
     with app.app_context():
-        # db.create_all()
-        # db.session.commit()
-        app.run()
+        db.create_all()
+        db.session.commit()
+        # app.run()

@@ -1,7 +1,8 @@
-import requests
 from appointments import check_for_appointments
+import datetime
 from dotenv import load_dotenv
 import os
+import requests
 from twilio.rest import Client
 
 load_dotenv()
@@ -39,11 +40,29 @@ def send_text_message(user, message_content):
             from_=TWILIO_PHONE_NUMBER,
             to=user.phone_number
         )
+    add_sent_texts_to_db(message_content)
     return
 
+def reset_texts_sent_per_day():
+    requests.put(f"{API_URL}/user/reset")
+
 if __name__ == '__main__':
+    # Instead of setting up a seperate cron job just run it here.
+    current_day = datetime.now().day
+    current_hour = datetime.now().hour
+    current_minute = datetime.now().minute
+    if current_hour == 0 and current_minute <= 5:
+        reset_texts_sent_per_day()
+
     response = requests.get(f"{API_URL}/user")
     users_dict = response.json()
+    REMINDER_MSG = '''
+    Reminder to text "STOP" when you have booked an appointment in order to stop receiving text messages
+    '''
+    for user in users_dict:
+        if user.texts_sent_today == 0:
+            send_text_message(user, REMINDER_MSG)
+
     locations_dict = users_dict_to_locations_dict(users_dict)
     for location_id, users in locations_dict.items():
         new_appointments = check_for_appointments(location_id)
@@ -52,6 +71,5 @@ if __name__ == '__main__':
             for appointment in new_appointments:
                 message_content = f"New Global Entry Appointment Available in {location.city}, {location.state} at {appointment.timestamp}"
                 for user in users:
-                    if message_content not in user.texts_sent:
+                    if (user.text_sent_today < 25) and (message_content not in user.texts_sent):
                         send_text_message(user, message_content)
-                        add_sent_texts_to_db(message_content)
