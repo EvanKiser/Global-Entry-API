@@ -60,6 +60,9 @@ if __name__ == '__main__':
     response = requests.get(f"{API_URL}/user")
     users_dict = response.json()
     for user in users_dict:
+        # We will send the text early in the morning ideally after texts nums have
+        # been reset and no texts have been sent. That is why it is set to 0.
+        # After a reminder is set it would then be 1.
         if (user['texts_sent_today'] == 2):
             send_text_message(user['id'], user['phone'], REMINDER_MSG)
 
