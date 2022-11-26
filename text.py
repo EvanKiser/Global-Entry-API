@@ -1,5 +1,5 @@
 from appointments import check_for_appointments
-import datetime
+from datetime import datetime
 from dotenv import load_dotenv
 import os
 import requests
