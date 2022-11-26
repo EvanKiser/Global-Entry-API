@@ -161,7 +161,7 @@ class User(db.Model):
         self.phone = phone
         self.locations = locations
         self.start_date = datetime.now()
-        self.end_date = self.start_date + timedelta(days=22)
+        self.end_date = self.start_date + timedelta(days=28)
         self.texts_sent = texts_sent
         self.texts_sent_today = 1
 
@@ -184,7 +184,7 @@ def add_user():
         data = User(email, phone, locations)
         db.session.add(data)
         db.session.commit()
-        # send_welcome_message(phone)
+        send_welcome_message(phone)
     resp = jsonify("cool email")
     resp.status_code = 200
     return resp
