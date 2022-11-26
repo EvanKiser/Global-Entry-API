@@ -7,6 +7,8 @@ from twilio.rest import Client
 
 load_dotenv()
 
+REMINDER_MSG = '''Reminder to text \"STOP\" when you have booked an appointment in order to stop receiving updates'''
+
 API_URL = os.getenv("API_URL") if os.getenv("ENV") != 'dev' else 'http://127.0.0.1:5000'
 ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
 AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
@@ -57,12 +59,8 @@ if __name__ == '__main__':
 
     response = requests.get(f"{API_URL}/user")
     users_dict = response.json()
-    REMINDER_MSG = '''
-    Reminder to text "STOP" when you have booked an appointment in order to stop receiving text messages
-    '''
     for user in users_dict:
-        print(current_day)
-        if (user['texts_sent_today'] == 1):
+        if (user['texts_sent_today'] == 1) and (current_day%3==0):
             send_text_message(user['id'], user['phone'], REMINDER_MSG)
 
     locations_dict = users_dict_to_locations_dict(users_dict)
