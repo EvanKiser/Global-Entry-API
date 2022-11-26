@@ -14,15 +14,16 @@ TWILIO_PHONE_NUMBER = os.getenv('TWILIO_PHONE_NUMBER')
 client = Client(ACCOUNT_SID, AUTH_TOKEN)
 
 class User():
-    def __init__(self, id, phone_number, texts_sent):
+    def __init__(self, id, phone_number, texts_sent, texts_sent_today):
         self.id = id
         self.phone_number = phone_number
         self.texts_sent = texts_sent
+        self.texts_sent_today = texts_sent_today
 
 def users_dict_to_locations_dict(users_dict):
     locations_dict = {}
     for user in users_dict:
-        user_obj = User(user["id"], user["phone"], user["texts_sent"])
+        user_obj = User(user["id"], user["phone"], user["texts_sent"], user["texts_sent_today"])
         for location in user["locations"]:
             if location in locations_dict:
                 locations_dict[location].add(user_obj)
@@ -61,7 +62,7 @@ if __name__ == '__main__':
     '''
     for user in users_dict:
         print(user)
-        if current_day%3==0 and user.texts_sent_today == 0:
+        if current_day%3==0 and user['texts_sent_today'] == 0:
             send_text_message(user, REMINDER_MSG)
 
     locations_dict = users_dict_to_locations_dict(users_dict)
