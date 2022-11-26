@@ -35,12 +35,12 @@ def add_sent_texts_to_db(message_content):
     requests.put(f"{API_URL}/user/{user.id}", json={'id': user.id,'text_sent': message_content})
 
 def send_text_message(user, message_content):
-    # _ = client.messages \
-    #     .create(
-    #         body=message_content,
-    #         from_=TWILIO_PHONE_NUMBER,
-    #         to=user.phone_number
-    #     )
+    _ = client.messages \
+        .create(
+            body=message_content,
+            from_=TWILIO_PHONE_NUMBER,
+            to=user.phone_number
+        )
     add_sent_texts_to_db(message_content)
     return
 
@@ -61,7 +61,8 @@ if __name__ == '__main__':
     Reminder to text "STOP" when you have booked an appointment in order to stop receiving text messages
     '''
     for user in users_dict:
-        if current_day%3==0 and user['texts_sent_today'] == 0:
+        print(current_day)
+        if (user['texts_sent_today'] == 1):
             send_text_message(user, REMINDER_MSG)
 
     locations_dict = users_dict_to_locations_dict(users_dict)
@@ -72,8 +73,6 @@ if __name__ == '__main__':
             for appointment in new_appointments:
                 message_content = f"New Global Entry Appointment Available in {location.city}, {location.state} at {appointment.timestamp}"
                 for user in users:
-                    print(user.texts_sent_today)
                     if (user.texts_sent_today < 25) and (message_content not in user.texts_sent):
                         send_text_message(user, message_content)
                         user.texts_sent_today += 1
-                        print("message sent")
