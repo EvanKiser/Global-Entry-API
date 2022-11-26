@@ -59,7 +59,6 @@ def check_for_appointments(location_id):
     new_appointments = []
     for result in results:
         if result['active'] > 0:
-            print(result)
             date = format_ttp_date(result['timestamp'])
             timestamp = date.strftime(MESSAGE_TIME_FORMAT)
             # Check if we have seen this appointment in the last 24 hours
