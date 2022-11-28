@@ -37,12 +37,12 @@ def add_sent_texts_to_db(user_id, message_content):
     requests.put(f"{API_URL}/user/{user_id}", json={'id': user_id,'text_sent': message_content})
 
 def send_text_message(user_id, phone_number, message_content):
-    _ = client.messages \
-        .create(
-            body=message_content,
-            from_=TWILIO_PHONE_NUMBER,
-            to=phone_number
-        )
+    # _ = client.messages \
+    #     .create(
+    #         body=message_content,
+    #         from_=TWILIO_PHONE_NUMBER,
+    #         to=phone_number
+    #     )
     add_sent_texts_to_db(user_id, message_content)
     return
 
@@ -54,6 +54,7 @@ if __name__ == '__main__':
     current_day = datetime.now().day
     current_hour = datetime.now().hour
     current_minute = datetime.now().minute
+    print(current_hour, current_minute)
     if current_hour == 0 and current_minute < 5:
         reset_texts_sent_per_day()
 
