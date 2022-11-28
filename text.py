@@ -54,7 +54,7 @@ if __name__ == '__main__':
     current_day = datetime.now().day
     current_hour = datetime.now().hour
     current_minute = datetime.now().minute
-    if current_hour == 0 and current_minute <= 5:
+    if current_hour == 0 and current_minute < 5:
         reset_texts_sent_per_day()
 
     response = requests.get(f"{API_URL}/user")
