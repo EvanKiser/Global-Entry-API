@@ -54,7 +54,6 @@ if __name__ == '__main__':
     current_day = datetime.now().day
     current_hour = datetime.now().hour
     current_minute = datetime.now().minute
-    print(current_hour, current_minute)
     if current_hour == 0 and current_minute < 5:
         reset_texts_sent_per_day()
 
