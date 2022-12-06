@@ -16,7 +16,7 @@ client = Client(ACCOUNT_SID, AUTH_TOKEN)
 
 def send_welcome_message(phone_number):
     WELCOME_MSG = f"""
-        This is Global Entry Scanner. Thanks for signing up! You will now recieve texts about new Global Entry interviews. Simply text "STOP" at any time to unsubscribe.
+        You will now recieve texts about new Global Entry Interviews. Simply text "STOP" at any time to unsubscribe.\n\nIf you find this service useful, please consider donating at https://tinyurl.com/GEScanDonate
         """
     return client.messages \
         .create(
