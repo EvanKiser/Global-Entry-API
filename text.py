@@ -7,7 +7,9 @@ from twilio.rest import Client
 
 load_dotenv()
 
-REMINDER_MSG = '''Please consider donating once you have successfully booked your appointment. https://tinyurl.com/GEScanDonate'''
+REMINDER_MSG = '''
+    If you find our service useful, please consider donating at https://tinyurl.com/GEScanDonate once you have successfully booked your appointment.
+'''
 
 API_URL = os.getenv("API_URL") if os.getenv("ENV") != 'dev' else 'http://127.0.0.1:5000'
 ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
