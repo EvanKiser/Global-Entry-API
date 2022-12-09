@@ -20,7 +20,7 @@ class Appointment:
         self.location = location
         self.timestamp = timestamp
 
-def get_appointments(location_id, delta_weeks=6):
+def get_appointments(location_id, delta_weeks=4):
     start = datetime.now()
     end = start + timedelta(weeks=delta_weeks)
 
