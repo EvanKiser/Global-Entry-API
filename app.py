@@ -270,7 +270,7 @@ def get_all_users():
     return resp
 
 @app.route('/user/count', methods = ['GET'])
-def get_all_users():
+def count_users():
     if request.method == 'GET':
         users = User.query.all()
     resp = jsonify(len(users))
