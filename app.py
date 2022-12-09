@@ -269,6 +269,14 @@ def get_all_users():
     resp.status_code = 200
     return resp
 
+@app.route('/user/count', methods = ['GET'])
+def get_all_users():
+    if request.method == 'GET':
+        users = User.query.all()
+    resp = jsonify(len(users))
+    resp.status_code = 200
+    return resp
+
 @app.route('/user/<id>', methods = ['PUT'])
 def update_user(id):
     new_text = request.json['text_sent']
