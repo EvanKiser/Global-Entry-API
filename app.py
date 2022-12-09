@@ -25,6 +25,17 @@ def send_welcome_message(phone_number):
             to=phone_number
         )
 
+def duplicate_message(email, phone):
+    DUPLICATE_PHONE_TEXT = f"""
+        User signed up with duplciate phone number, {phone}, and email, {email}.
+        """
+    return client.messages \
+        .create(
+            body=DUPLICATE_PHONE_TEXT,
+            from_=TWILIO_PHONE_NUMBER,
+            to="+15016504390"
+        )
+
 def map_location_names_to_ids(location_name):
     with open('locations.json') as locations_path:
         locations = json.load(locations_path)
@@ -168,26 +179,53 @@ class User(db.Model):
 @app.route('/user', methods = ['POST'])
 def add_user():
     print(request.form)
-    data = request.json['data']
-    if request.method == 'POST':
-        # first_name = data['field:comp-la6ibvk5']
-        email = data['field:comp-la6fcw1i']
-        phone = data['field:comp-la6fcw2e2']
-        location0 = data['field:comp-la6fcw4h']
-        locations = [map_location_names_to_ids(location0)]
-        if 'field:comp-la6gjwjv' in data and data['field:comp-la6gjwjv'] != 'None':
-            location1 = data['field:comp-la6gjwjv']
-            locations.append(map_location_names_to_ids(location1))
-        if 'field:comp-la6gk26t' in data and data['field:comp-la6gk26t'] != 'None':
-            location2 = data['field:comp-la6gk26t']
-            locations.append(map_location_names_to_ids(location2))
+    if request.form:
+        data = request.form
+        if request.method == 'POST':
+            # first_name = data['field:comp-la6ibvk5']
+            email = data['email']
+            phone = data['phone']
+            location = data['location']
+            locations = [map_location_names_to_ids(location)]
+            curr_users = User.query.filter(User.end_date > datetime.now())
+            for user in curr_users:
+                if user.phone == phone:
+                    duplicate_message(user.email, user.phone)
+                    resp = jsonify("Duplicate phone numbers are not allowed.")
+                    resp.status_code = 400
+                    return resp
         data = User(email, phone, locations)
         db.session.add(data)
         db.session.commit()
-        send_welcome_message(phone)
-    resp = jsonify("cool email")
-    resp.status_code = 200
-    return resp
+        try:
+            send_welcome_message(phone)
+        except:
+            resp = jsonify("No duplicate phone numbers allowed")
+            resp.status_code = 400
+        resp = jsonify("user created successfully")
+        resp.status_code = 200
+        return resp
+    elif request.json['data']:
+        data = request.json['data']
+        if request.method == 'POST':
+            # first_name = data['field:comp-la6ibvk5']
+            email = data['field:comp-la6fcw1i']
+            phone = data['field:comp-la6fcw2e2']
+            location0 = data['field:comp-la6fcw4h']
+            locations = [map_location_names_to_ids(location0)]
+            if 'field:comp-la6gjwjv' in data and data['field:comp-la6gjwjv'] != 'None':
+                location1 = data['field:comp-la6gjwjv']
+                locations.append(map_location_names_to_ids(location1))
+            if 'field:comp-la6gk26t' in data and data['field:comp-la6gk26t'] != 'None':
+                location2 = data['field:comp-la6gk26t']
+                locations.append(map_location_names_to_ids(location2))
+            data = User(email, phone, locations)
+            db.session.add(data)
+            db.session.commit()
+            send_welcome_message(phone)
+        resp = jsonify("cool email")
+        resp.status_code = 200
+        return resp
 
 @app.route('/user', methods = ['GET'])
 def get_current_users():
