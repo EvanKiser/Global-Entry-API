@@ -314,8 +314,11 @@ def stop_texts():
             resp = jsonify(f"Not a correct text body.")
             resp.status_Code = 400
             return resp
-        phone_number = '(' + phone[:2] + ') ' + phone[2:]
-        user = User.query.filter_by(phone=phone_number).first()
+        user = User.query.filter_by(phone=phone).first()
+        # TODO(EVAN) Delete when we no longer have old users
+        if not user:
+            phone_number = '(' + phone[:2] + ') ' + phone[2:]
+            user = User.query.filter_by(phone=phone_number).first()
         user.end_date = datetime.now()
         db.session.commit()
     resp = jsonify(f"user id: {user.id} no longer receving texts")
