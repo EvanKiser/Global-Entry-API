@@ -191,7 +191,7 @@ def add_user():
             for user in curr_users:
                 if user.phone == phone:
                     duplicate_message(user.email, user.phone)
-                    resp = jsonify("Duplicate phone numbers are not allowed.")
+                    resp = jsonify("Currently we have another user with this phone number. Please use a different phone number.")
                     resp.status_code = 400
                     return resp
         data = User(email, phone, locations)
@@ -200,7 +200,7 @@ def add_user():
         try:
             send_welcome_message(phone)
         except:
-            resp = jsonify("No duplicate phone numbers allowed")
+            resp = jsonify("phone number seems incorrect")
             resp.status_code = 400
         resp = jsonify("user created successfully")
         resp.status_code = 200
