@@ -217,6 +217,7 @@ def add_user():
                     resp = jsonify("Currently we have another user with this phone number. Please use a different phone number.")
                     resp.status_code = 400
                     return resp
+            print("here")
             try:
                 print("sending welcome message")
                 send_welcome_message(phone)
