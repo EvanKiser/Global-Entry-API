@@ -203,6 +203,7 @@ def add_user():
     print(request.form)
     print(request.json)
     if request.form:
+        print("her")
         data = request.form
         print(request.method)
         if request.method == 'POST':
@@ -256,6 +257,7 @@ def add_user():
         resp = jsonify("cool email")
         resp.status_code = 200
         return resp
+    print("there")
 
 @app.route('/user', methods = ['GET'])
 def get_current_users():
