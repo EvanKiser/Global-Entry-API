@@ -201,7 +201,6 @@ class User(db.Model):
 @app.route('/user', methods = ['POST'])
 def add_user():
     print(request.form)
-    print(request.json)
     if request.form:
         print("her")
         data = request.form
