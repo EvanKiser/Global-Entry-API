@@ -205,7 +205,7 @@ def add_user():
     if request.form:
         data = request.form
         if request.method == 'POST':
-            # first_name = data['field:comp-la6ibvk5']
+            name = data['name']
             email = data['email']
             phone = data['phone']
             location = data['location']
@@ -225,7 +225,7 @@ def add_user():
         except:
             resp = jsonify("phone number seems incorrect")
             resp.status_code = 400
-        sign_up_message_to_me(user.name, user.email, user.phone)
+        sign_up_message_to_me(name, email, phone)
         resp = jsonify("user created successfully")
         resp.status_code = 200
         return resp
