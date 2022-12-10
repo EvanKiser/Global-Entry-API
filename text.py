@@ -74,7 +74,7 @@ if __name__ == '__main__':
         if new_appointments != []:
             location = new_appointments[0].location
             for appointment in new_appointments:
-                message_content = f"New Global Entry Appointment Available in {location.city}, {location.state} at {appointment.timestamp}"
+                message_content = f"New Global Entry Appointment Available in {location.city}, {location.state} on {appointment.timestamp}"
                 for user in users:
                     if (user.texts_sent_today < 25) and (message_content not in user.texts_sent):
                         send_text_message(user.id, user.phone_number, message_content)
