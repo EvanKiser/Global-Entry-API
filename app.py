@@ -202,9 +202,7 @@ class User(db.Model):
 def add_user():
     print(request.form)
     if request.form:
-        print("her")
         data = request.form
-        print(request.method)
         if request.method == 'POST':
             name = data['name']
             email = data['email']
@@ -220,9 +218,7 @@ def add_user():
                     return resp
             print("here")
             try:
-                print("sending welcome message")
                 send_welcome_message(phone)
-                print("welcome message sent")
             except:
                 print("phone number seems incorrect")
                 resp = jsonify("phone number seems incorrect")
