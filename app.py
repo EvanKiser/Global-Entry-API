@@ -36,6 +36,28 @@ def duplicate_message(email, phone):
             to="+15016504390"
         )
 
+def sign_up_message_to_me(name, email, phone):
+    STOP_MSG_TO_ME = f"""
+        User signed up. \n{name}, \n{email}, \n{phone}.
+        """
+    return client.messages \
+        .create(
+            body=STOP_MSG_TO_ME,
+            from_=TWILIO_PHONE_NUMBER,
+            to="+15016504390"
+        )
+
+def stop_message_to_me(start_date):
+    STOP_MSG_TO_ME = f"""
+        User stopped. Sign up date: {start_date}.
+        """
+    return client.messages \
+        .create(
+            body=STOP_MSG_TO_ME,
+            from_=TWILIO_PHONE_NUMBER,
+            to="+15016504390"
+        )
+
 def map_location_names_to_ids(location_name):
     with open('locations.json') as locations_path:
         locations = json.load(locations_path)
@@ -179,6 +201,7 @@ class User(db.Model):
 @app.route('/user', methods = ['POST'])
 def add_user():
     print(request.form)
+    print(request.json)
     if request.form:
         data = request.form
         if request.method == 'POST':
@@ -202,6 +225,7 @@ def add_user():
         except:
             resp = jsonify("phone number seems incorrect")
             resp.status_code = 400
+        sign_up_message_to_me(user.name, user.email, user.phone)
         resp = jsonify("user created successfully")
         resp.status_code = 200
         return resp
@@ -338,6 +362,7 @@ def stop_texts():
                     user = u
                     break
         user.end_date = datetime.now()
+        stop_message_to_me(user.start_date)
         db.session.commit()
     resp = jsonify(f"user id: {user.id} no longer receving texts")
     resp.status_Code = 200
