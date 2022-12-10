@@ -223,6 +223,7 @@ def add_user():
         try:
             send_welcome_message(phone)
         except:
+            print("phone number seems incorrect")
             resp = jsonify("phone number seems incorrect")
             resp.status_code = 400
         sign_up_message_to_me(name, email, phone)
