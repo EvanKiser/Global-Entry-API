@@ -204,6 +204,7 @@ def add_user():
     print(request.json)
     if request.form:
         data = request.form
+        print(request.method)
         if request.method == 'POST':
             name = data['name']
             email = data['email']
