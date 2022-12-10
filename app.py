@@ -217,15 +217,18 @@ def add_user():
                     resp = jsonify("Currently we have another user with this phone number. Please use a different phone number.")
                     resp.status_code = 400
                     return resp
+            try:
+                print("sending welcome message")
+                send_welcome_message(phone)
+                print("welcome message sent")
+            except:
+                print("phone number seems incorrect")
+                resp = jsonify("phone number seems incorrect")
+                resp.status_code = 400
+                return resp
         data = User(email, phone, locations)
         db.session.add(data)
         db.session.commit()
-        try:
-            send_welcome_message(phone)
-        except:
-            print("phone number seems incorrect")
-            resp = jsonify("phone number seems incorrect")
-            resp.status_code = 400
         sign_up_message_to_me(name, email, phone)
         resp = jsonify("user created successfully")
         resp.status_code = 200
