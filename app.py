@@ -16,7 +16,7 @@ client = Client(ACCOUNT_SID, AUTH_TOKEN)
 
 def send_welcome_message(phone_number):
     WELCOME_MSG = f"""
-        You will now recieve texts about new Global Entry interviews. Simply text "STOP" at any time to unsubscribe.\n\nIf you find this service useful, please consider donating at https://tinyurl.com/GEScanDonate
+        You will now recieve texts about new Global Entry interviews. Simply text "STOP" at any time to unsubscribe.
         """
     return client.messages \
         .create(
@@ -54,6 +54,17 @@ def stop_message_to_me(start_date):
     return client.messages \
         .create(
             body=STOP_MSG_TO_ME,
+            from_=TWILIO_PHONE_NUMBER,
+            to="+15016504390"
+        )
+
+def sign_up_try(name, email, phone):
+    SIGN_UP_TRY = f"""
+        New user try\n{name}\n{email}\n{phone}.
+        """
+    return client.messages \
+        .create(
+            body=SIGN_UP_TRY,
             from_=TWILIO_PHONE_NUMBER,
             to="+15016504390"
         )
@@ -208,6 +219,7 @@ def add_user():
             email = data['email']
             phone = data['phone']
             location = data['location']
+            sign_up_try(name, email, phone)
             locations = [map_location_names_to_ids(location)]
             curr_users = User.query.filter(User.end_date > datetime.now())
             for user in curr_users:
