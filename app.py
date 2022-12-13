@@ -211,8 +211,9 @@ class User(db.Model):
 
 @app.route('/user', methods = ['POST'])
 def add_user():
+    print("here")
+    print(request.form)
     sign_up_try("test", "test", "test")
-    #print(request.form)
     if request.form:
         data = request.form
         if request.method == 'POST':
