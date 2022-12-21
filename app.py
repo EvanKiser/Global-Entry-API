@@ -36,9 +36,9 @@ def duplicate_message(email, phone):
             to="+15016504390"
         )
 
-def sign_up_message_to_me(name, email, phone):
+def sign_up_message_to_me(name, email, phone, location):
     STOP_MSG_TO_ME = f"""
-        User signed up. \n{name}, \n{email}, \n{phone}.
+        User signed up. \n{name}, \n{email}, \n{phone}, \n{location}.
         """
     return client.messages \
         .create(
@@ -54,17 +54,6 @@ def stop_message_to_me(start_date):
     return client.messages \
         .create(
             body=STOP_MSG_TO_ME,
-            from_=TWILIO_PHONE_NUMBER,
-            to="+15016504390"
-        )
-
-def sign_up_try(name, email, phone):
-    SIGN_UP_TRY = f"""
-        New user try\n{name}\n{email}\n{phone}.
-        """
-    return client.messages \
-        .create(
-            body=SIGN_UP_TRY,
             from_=TWILIO_PHONE_NUMBER,
             to="+15016504390"
         )
@@ -211,9 +200,7 @@ class User(db.Model):
 
 @app.route('/user', methods = ['POST'])
 def add_user():
-    print("here")
     print(request.form)
-    sign_up_try("test", "test", "test")
     if request.form:
         data = request.form
         if request.method == 'POST':
@@ -221,7 +208,6 @@ def add_user():
             email = data['email']
             phone = data['phone']
             location = data['location']
-            sign_up_try(name, email, phone)
             locations = [map_location_names_to_ids(location)]
             curr_users = User.query.filter(User.end_date > datetime.now())
             for user in curr_users:
@@ -230,7 +216,6 @@ def add_user():
                     resp = jsonify("Currently we have another user with this phone number. Please use a different phone number.")
                     resp.status_code = 400
                     return resp
-            print("here")
             try:
                 send_welcome_message(phone)
             except:
@@ -241,7 +226,7 @@ def add_user():
         data = User(email, phone, locations)
         db.session.add(data)
         db.session.commit()
-        sign_up_message_to_me(name, email, phone)
+        sign_up_message_to_me(name, email, phone, location)
         resp = jsonify("user created successfully")
         resp.status_code = 200
         return resp
