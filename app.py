@@ -47,9 +47,9 @@ def sign_up_message_to_me(name, email, phone, location):
             to="+15016504390"
         )
 
-def stop_message_to_me(start_date):
+def stop_message_to_me(start_date, phone, email):
     STOP_MSG_TO_ME = f"""
-        User stopped. Sign up date: {start_date}.
+        User stopped. Sign up date: {start_date},\n{phone},\n{email}.
         """
     return client.messages \
         .create(
@@ -352,19 +352,19 @@ def stop_texts():
         print(phone_number)
         users = User.query.filter(User.end_date > datetime.now())
         user = None
+        found_users = []
         for u in users:
             if u.phone == phone_number:
-                user = u
-                break
-        if not user:
+                found_users.append(u)
+        if found_users == []:
             phone_number = phone[2:]
             print(phone_number, " 2nd try")
             for u in users:
                 if u.phone == phone_number:
-                    user = u
-                    break
-        user.end_date = datetime.now()
-        stop_message_to_me(user.start_date)
+                    found_users.append(u)
+        for user in found_users:
+            user.end_date = datetime.now()
+            stop_message_to_me(user.start_date, user.phone, user.email)
         db.session.commit()
     resp = jsonify(f"user id: {user.id} no longer receving texts")
     resp.status_Code = 200
