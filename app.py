@@ -14,9 +14,9 @@ AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
 TWILIO_PHONE_NUMBER = os.getenv('TWILIO_PHONE_NUMBER')
 client = Client(ACCOUNT_SID, AUTH_TOKEN)
 
-def send_welcome_message(phone_number):
+def send_welcome_message(phone_number, name=""):
     WELCOME_MSG = f"""
-        You will now recieve texts about new Global Entry interviews. Simply text "STOP" at any time to unsubscribe.
+        Hello {name}, You will now recieve texts about new Global Entry interviews. Simply text "STOP" at any time to unsubscribe.
         """
     return client.messages \
         .create(
@@ -217,7 +217,7 @@ def add_user():
                     resp.status_code = 400
                     return resp
             try:
-                send_welcome_message(phone)
+                send_welcome_message(phone, name)
             except:
                 print("phone number seems incorrect")
                 resp = jsonify("phone number seems incorrect")
