@@ -244,6 +244,22 @@ def add_user():
             if 'field:comp-la6gk26t' in data and data['field:comp-la6gk26t'] != 'None':
                 location2 = data['field:comp-la6gk26t']
                 locations.append(map_location_names_to_ids(location2))
+            curr_users = User.query.filter(User.end_date > datetime.now())
+            
+            for user in curr_users:
+                if user.phone == phone:
+                    duplicate_message(user.email, user.phone)
+                    resp = jsonify("Currently we have another user with this phone number. Please use a different phone number.")
+                    resp.status_code = 400
+                    return resp
+            try:
+                send_welcome_message(phone)
+            except:
+                print("phone number seems incorrect")
+                resp = jsonify("phone number seems incorrect")
+                resp.status_code = 400
+                return resp
+
             data = User(email, phone, locations)
             db.session.add(data)
             db.session.commit()
