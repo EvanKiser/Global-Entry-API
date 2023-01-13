@@ -360,7 +360,7 @@ def stop_texts():
         phone = data.get('From', None)
         body = data.get('Body', None).upper()
         print(body, phone)
-        if body not in ["STOP", "STOPALL", "UNSUBSCRIBE", "CANCEL", "END", "QUIT"]
+        if body not in ["STOP", "STOPALL", "UNSUBSCRIBE", "CANCEL", "END", "QUIT"]:
             resp = jsonify(f"Not a correct text body.")
             resp.status_Code = 400
             return resp
