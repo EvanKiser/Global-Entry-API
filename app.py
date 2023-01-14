@@ -6,13 +6,35 @@ import json
 import os
 from mutable import MutableList
 from twilio.rest import Client
+import stripe
 
+stripe.api_key = os.getenv('STRIPE_SECRET')
 load_dotenv()
 
 ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
 AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
 TWILIO_PHONE_NUMBER = os.getenv('TWILIO_PHONE_NUMBER')
 client = Client(ACCOUNT_SID, AUTH_TOKEN)
+
+def create_checkout_session(user_id):
+    try:
+        checkout_session = stripe.checkout.Session.create(
+            client_reference_id='{user_id}',
+            line_items=[
+                {
+                    # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+                    'price': '{{price_1MQ5VWIcbfJQY4bat1kPw3P0}}',
+                    'quantity': 1,
+                },
+            ],
+            mode='payment',
+            success_url='www.ttpscan.com',
+            automatic_tax={'enabled': False},
+        )
+    except Exception as e:
+        return str(e)
+
+    return checkout_session.url
 
 def send_welcome_message(phone_number, name=""):
     WELCOME_MSG = f"""
@@ -383,6 +405,37 @@ def stop_texts():
             stop_message_to_me(user.start_date, user.phone, user.email)
         db.session.commit()
     resp = jsonify(f"user id: {user.id} no longer receving texts")
+    resp.status_Code = 200
+    return resp
+
+##### STOP TEXTS #####
+@app.route('/paid', methods = ['PUT']) 
+def paid():
+    payload = request.body
+    sig_header = request.META['HTTP_STRIPE_SIGNATURE']
+    endpoint_secret = os.getenv('STRIPE_WEBHOOK_SECRET')
+    event = None
+    resp = jsonify(f"")
+
+    try:
+        event = stripe.Webhook.construct_event(
+        payload, sig_header, endpoint_secret
+        )
+    except ValueError as e:
+        # Invalid payload
+        resp.status_Code = 400
+        return resp
+    except stripe.error.SignatureVerificationError as e:
+        # Invalid signature
+        resp.status_Code = 400
+        return resp
+
+    if event['type'] == 'checkout.session.async_payment_succeeded':
+        session = event['data']['object']
+        print(session)
+        # Fulfill the purchase
+
+    resp = jsonify(f"")
     resp.status_Code = 200
     return resp
         
