@@ -16,6 +16,14 @@ AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
 TWILIO_PHONE_NUMBER = os.getenv('TWILIO_PHONE_NUMBER')
 client = Client(ACCOUNT_SID, AUTH_TOKEN)
 
+def send_text(message_content, phone_number):
+    return client.messages \
+        .create(
+            body=message_content,
+            from_=TWILIO_PHONE_NUMBER,
+            to=phone_number
+        )
+
 def create_checkout_session(user_id):
     try:
         checkout_session = stripe.checkout.Session.create(
@@ -36,49 +44,37 @@ def create_checkout_session(user_id):
 
     return checkout_session.url
 
+def send_checkout_link(user_id, num_texts_sent, phone_number):
+    CHECKOUT_MSG = f"""
+        This concludes your free trial. If you would like to continue using this service complete checkout here. {checkout_url}
+        """
+    if num_texts_sent == 5:
+        checkout_url = create_checkout_session(user_id)
+        return send_text(CHECKOUT_MSG, phone_number)
+
 def send_welcome_message(phone_number, name=""):
     WELCOME_MSG = f"""
         Hello {name}, You will now recieve texts about new Global Entry interviews. Simply text "STOP" at any time to unsubscribe.
         """
-    return client.messages \
-        .create(
-            body=WELCOME_MSG,
-            from_=TWILIO_PHONE_NUMBER,
-            to=phone_number
-        )
+    return send_text(WELCOME_MSG, phone_number)
 
 def duplicate_message(email, phone):
     DUPLICATE_PHONE_TEXT = f"""
         User signed up with duplciate phone number, {phone}, and email, {email}.
         """
-    return client.messages \
-        .create(
-            body=DUPLICATE_PHONE_TEXT,
-            from_=TWILIO_PHONE_NUMBER,
-            to="+15016504390"
-        )
+    return send_text(DUPLICATE_PHONE_TEXT, "+15016504390")
 
 def sign_up_message_to_me(name, email, phone, location):
     STOP_MSG_TO_ME = f"""
         User signed up. \n{name}, \n{email}, \n{phone}, \n{location}.
         """
-    return client.messages \
-        .create(
-            body=STOP_MSG_TO_ME,
-            from_=TWILIO_PHONE_NUMBER,
-            to="+15016504390"
-        )
+    return send_text(STOP_MSG_TO_ME, "+15016504390")
 
 def stop_message_to_me(start_date, phone, email):
     STOP_MSG_TO_ME = f"""
         User stopped. Sign up date: {start_date},\n{phone},\n{email}.
         """
-    return client.messages \
-        .create(
-            body=STOP_MSG_TO_ME,
-            from_=TWILIO_PHONE_NUMBER,
-            to="+15016504390"
-        )
+    return send_text(STOP_MSG_TO_ME, "+15016504390")
 
 def map_location_names_to_ids(location_name):
     with open('locations.json') as locations_path:
@@ -349,6 +345,8 @@ def update_user(id):
         user.texts_sent.append(new_text)
         user.texts_sent_today += 1
         db.session.commit()
+
+        send_checkout_link(user.id, len(user.texts_sent), user.phone)
     resp = jsonify(f"texts sent updated")
     resp.status_Code = 200
     return resp
