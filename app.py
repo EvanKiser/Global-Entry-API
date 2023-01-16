@@ -6,7 +6,9 @@ import json
 import os
 from mutable import MutableList
 from twilio.rest import Client
+import stripe
 
+stripe.api_key = os.getenv('STRIPE_SECRET')
 load_dotenv()
 
 ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
@@ -14,49 +16,65 @@ AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
 TWILIO_PHONE_NUMBER = os.getenv('TWILIO_PHONE_NUMBER')
 client = Client(ACCOUNT_SID, AUTH_TOKEN)
 
+def send_text(message_content, phone_number):
+    return client.messages \
+        .create(
+            body=message_content,
+            from_=TWILIO_PHONE_NUMBER,
+            to=phone_number
+        )
+
+def create_checkout_session(user_id):
+    try:
+        checkout_session = stripe.checkout.Session.create(
+            client_reference_id={user_id},
+            line_items=[
+                {
+                    # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+                    'price': '{{price_1MQ5VWIcbfJQY4bat1kPw3P0}}',
+                    'quantity': 1,
+                },
+            ],
+            mode='payment',
+            success_url='www.ttpscan.com',
+            automatic_tax={'enabled': False},
+        )
+    except Exception as e:
+        return str(e)
+
+    return checkout_session.url
+
+def send_checkout_link(user_id, num_texts_sent, phone_number):
+    CHECKOUT_MSG = f"""
+        This concludes your free trial. If you would like to continue using this service complete checkout here. {checkout_url}
+        """
+    if num_texts_sent == 0 and phone_number == "5016504390":
+        checkout_url = create_checkout_session(user_id)
+        return send_text(CHECKOUT_MSG, phone_number)
+
 def send_welcome_message(phone_number, name=""):
     WELCOME_MSG = f"""
         Hello {name}, You will now recieve texts about new Global Entry interviews. Simply text "STOP" at any time to unsubscribe.
         """
-    return client.messages \
-        .create(
-            body=WELCOME_MSG,
-            from_=TWILIO_PHONE_NUMBER,
-            to=phone_number
-        )
+    return send_text(WELCOME_MSG, phone_number)
 
 def duplicate_message(email, phone):
     DUPLICATE_PHONE_TEXT = f"""
         User signed up with duplciate phone number, {phone}, and email, {email}.
         """
-    return client.messages \
-        .create(
-            body=DUPLICATE_PHONE_TEXT,
-            from_=TWILIO_PHONE_NUMBER,
-            to="+15016504390"
-        )
+    return send_text(DUPLICATE_PHONE_TEXT, "+15016504390")
 
 def sign_up_message_to_me(name, email, phone, location):
     STOP_MSG_TO_ME = f"""
         User signed up. \n{name}, \n{email}, \n{phone}, \n{location}.
         """
-    return client.messages \
-        .create(
-            body=STOP_MSG_TO_ME,
-            from_=TWILIO_PHONE_NUMBER,
-            to="+15016504390"
-        )
+    return send_text(STOP_MSG_TO_ME, "+15016504390")
 
 def stop_message_to_me(start_date, phone, email):
     STOP_MSG_TO_ME = f"""
         User stopped. Sign up date: {start_date},\n{phone},\n{email}.
         """
-    return client.messages \
-        .create(
-            body=STOP_MSG_TO_ME,
-            from_=TWILIO_PHONE_NUMBER,
-            to="+15016504390"
-        )
+    return send_text(STOP_MSG_TO_ME, "+15016504390")
 
 def map_location_names_to_ids(location_name):
     with open('locations.json') as locations_path:
@@ -327,6 +345,8 @@ def update_user(id):
         user.texts_sent.append(new_text)
         user.texts_sent_today += 1
         db.session.commit()
+
+        send_checkout_link(user.id, len(user.texts_sent), user.phone)
     resp = jsonify(f"texts sent updated")
     resp.status_Code = 200
     return resp
@@ -383,6 +403,37 @@ def stop_texts():
             stop_message_to_me(user.start_date, user.phone, user.email)
         db.session.commit()
     resp = jsonify(f"user id: {user.id} no longer receving texts")
+    resp.status_Code = 200
+    return resp
+
+##### STOP TEXTS #####
+@app.route('/paid', methods = ['PUT']) 
+def paid():
+    payload = request.body
+    sig_header = request.META['HTTP_STRIPE_SIGNATURE']
+    endpoint_secret = os.getenv('STRIPE_WEBHOOK_SECRET')
+    event = None
+    resp = jsonify(f"")
+
+    try:
+        event = stripe.Webhook.construct_event(
+        payload, sig_header, endpoint_secret
+        )
+    except ValueError as e:
+        # Invalid payload
+        resp.status_Code = 400
+        return resp
+    except stripe.error.SignatureVerificationError as e:
+        # Invalid signature
+        resp.status_Code = 400
+        return resp
+
+    if event['type'] == 'checkout.session.async_payment_succeeded':
+        session = event['data']['object']
+        print(session)
+        # Fulfill the purchase
+
+    resp = jsonify(f"")
     resp.status_Code = 200
     return resp
         
