@@ -27,7 +27,7 @@ def send_text(message_content, phone_number):
 def create_checkout_session(user_id):
     try:
         checkout_session = stripe.checkout.Session.create(
-            client_reference_id='{user_id}',
+            client_reference_id={user_id},
             line_items=[
                 {
                     # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
@@ -48,7 +48,7 @@ def send_checkout_link(user_id, num_texts_sent, phone_number):
     CHECKOUT_MSG = f"""
         This concludes your free trial. If you would like to continue using this service complete checkout here. {checkout_url}
         """
-    if num_texts_sent == 5:
+    if num_texts_sent == 0 and phone_number == "5016504390":
         checkout_url = create_checkout_session(user_id)
         return send_text(CHECKOUT_MSG, phone_number)
 
