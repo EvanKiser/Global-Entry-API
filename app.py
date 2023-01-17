@@ -7,6 +7,7 @@ import os
 from mutable import MutableList
 from twilio.rest import Client
 import stripe
+import logging
 
 stripe.api_key = os.getenv('STRIPE_SECRET')
 load_dotenv()
@@ -48,6 +49,7 @@ def send_checkout_link(user_id, num_texts_sent, phone_number):
     CHECKOUT_MSG = f"""
         This concludes your free trial. If you would like to continue using this service complete checkout here. {checkout_url}
         """
+    logger.info(num_texts_sent, phone_number)
     print(num_texts_sent, phone_number)
     if num_texts_sent == 2 and phone_number == "5016504390":
         checkout_url = create_checkout_session(user_id)
@@ -345,9 +347,9 @@ def update_user(id):
         user = User.query.get(id)
         user.texts_sent.append(new_text)
         user.texts_sent_today += 1
-        db.session.commit()
-
+        print(user.id, len(user.texts_sent), user.phone)
         send_checkout_link(user.id, len(user.texts_sent), user.phone)
+        db.session.commit()
     resp = jsonify(f"texts sent updated")
     resp.status_Code = 200
     return resp
