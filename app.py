@@ -7,7 +7,6 @@ import os
 from mutable import MutableList
 from twilio.rest import Client
 import stripe
-import logging
 
 stripe.api_key = os.getenv('STRIPE_SECRET')
 load_dotenv()
@@ -46,13 +45,12 @@ def create_checkout_session(user_id):
     return checkout_session.url
 
 def send_checkout_link(user_id, num_texts_sent, phone_number):
-    CHECKOUT_MSG = f"""
-        This concludes your free trial. If you would like to continue using this service complete checkout here. {checkout_url}
-        """
-    logger.info(num_texts_sent, phone_number)
     print(num_texts_sent, phone_number)
     if num_texts_sent == 2 and phone_number == "5016504390":
         checkout_url = create_checkout_session(user_id)
+        CHECKOUT_MSG = f"""
+            This concludes your free trial. If you would like to continue using this service complete checkout here. {checkout_url}
+            """
         return send_text(CHECKOUT_MSG, phone_number)
 
 def send_welcome_message(phone_number, name=""):
