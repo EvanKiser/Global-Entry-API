@@ -49,7 +49,7 @@ def send_checkout_link(user_id, num_texts_sent, phone_number):
         This concludes your free trial. If you would like to continue using this service complete checkout here. {checkout_url}
         """
     print(num_texts_sent, phone_number)
-    if num_texts_sent == 1 and phone_number == "5016504390":
+    if num_texts_sent == 2 and phone_number == "5016504390":
         checkout_url = create_checkout_session(user_id)
         return send_text(CHECKOUT_MSG, phone_number)
 
