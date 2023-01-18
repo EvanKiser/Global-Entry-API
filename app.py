@@ -430,8 +430,8 @@ def paid():
         # Invalid payload
         resp.status_Code = 400
         return resp
-    except stripe.error.SignatureVerificationError as e:
-        # Invalid signature
+    except Exception as e:
+        print(e)
         resp.status_Code = 400
         return resp
     if event['type'] == 'checkout.session.completed':
