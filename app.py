@@ -420,7 +420,7 @@ def stop_texts():
     return resp
 
 ##### STOP TEXTS #####
-@app.route('/paid', methods = ['PUT']) 
+@app.route('/paid', methods = ['POST']) 
 def paid():
     payload = request.body
     sig_header = request.META['HTTP_STRIPE_SIGNATURE']
