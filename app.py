@@ -69,7 +69,7 @@ def duplicate_message(email, phone):
 
 def sign_up_message_to_me(name, email, phone, city, state):
     STOP_MSG_TO_ME = f"""
-        User signed up. \n{name}, \n{email}, \n{phone}, \n{location}.
+        User signed up. \n{name}, \n{email}, \n{phone}, \n{city}, \n{state}.
         """
     return send_text(STOP_MSG_TO_ME, "+15016504390")
 
