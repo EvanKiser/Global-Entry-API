@@ -54,9 +54,9 @@ def send_checkout_link(user_id, num_texts_sent, phone_number):
             """
         return send_text(CHECKOUT_MSG, phone_number)
 
-def send_welcome_message(phone_number, name=""):
+def send_welcome_message(phone_number, city, state, name=""):
     WELCOME_MSG = f"""
-        Hello {name}, You will now recieve texts about new Global Entry interviews. Simply text "STOP" at any time to unsubscribe.
+        Hey {name}, You will now recieve texts about new Global Entry interviews in {city}, {state}. Simply text "STOP" at any time to unsubscribe.
         """
     return send_text(WELCOME_MSG, phone_number)
 
@@ -83,7 +83,7 @@ def map_location_names_to_ids(location_name):
         locations = json.load(locations_path)
     for location in locations:
         if location["display_name"] == location_name:
-            return location["id"]
+            return location["id"], location["city"], location["state"]
 
 app = Flask(__name__)
 
@@ -237,7 +237,8 @@ def add_user():
                     resp.status_code = 400
                     return resp
             try:
-                send_welcome_message(phone, name)
+                id, city, state = map_location_names_to_ids(location)
+                send_welcome_message(phone, city, state, name)
             except:
                 print("phone number seems incorrect")
                 resp = jsonify("phone number seems incorrect")
@@ -257,12 +258,15 @@ def add_user():
             email = data['field:comp-la6fcw1i']
             phone = data['field:comp-la6fcw2e2']
             location0 = data['field:comp-la6fcw4h']
+            id, city, state = map_location_names_to_ids(location0)
             locations = [map_location_names_to_ids(location0)]
             if 'field:comp-la6gjwjv' in data and data['field:comp-la6gjwjv'] != 'None':
                 location1 = data['field:comp-la6gjwjv']
+                id, _, _ = map_location_names_to_ids(location1)
                 locations.append(map_location_names_to_ids(location1))
             if 'field:comp-la6gk26t' in data and data['field:comp-la6gk26t'] != 'None':
                 location2 = data['field:comp-la6gk26t']
+                id, _, _ = map_location_names_to_ids(location2)
                 locations.append(map_location_names_to_ids(location2))
             curr_users = User.query.filter(User.end_date > datetime.now())
             
@@ -273,7 +277,7 @@ def add_user():
                     resp.status_code = 400
                     return resp
             try:
-                send_welcome_message(phone)
+                send_welcome_message(phone, city, state)
             except:
                 print("phone number seems incorrect")
                 resp = jsonify("phone number seems incorrect")
@@ -283,7 +287,6 @@ def add_user():
             data = User(email, phone, locations)
             db.session.add(data)
             db.session.commit()
-            send_welcome_message(phone)
         resp = jsonify("cool email")
         resp.status_code = 200
         return resp
