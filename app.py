@@ -31,7 +31,8 @@ def create_checkout_session(user_id):
             line_items=[
                 {
                     # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-                    'price': 'price_1MQ5VWIcbfJQY4bat1kPw3P0',
+                    # 'price': 'price_1MQ5VWIcbfJQY4bat1kPw3P0', #PROD
+                    'price': 'price_1MRUqaIcbfJQY4baaOsS1rWx', #TEST
                     'quantity': 1,
                 },
             ],
@@ -56,7 +57,7 @@ def send_checkout_link(user_id, num_texts_sent, phone_number):
 
 def send_welcome_message(phone_number, city, state, name=""):
     WELCOME_MSG = f"""
-        Hey {name}, You will now recieve texts about new Global Entry interviews in {city}, {state}. Simply text "STOP" at any time to unsubscribe.
+        Hey {name}, you will now recieve texts about new Global Entry interviews in {city}, {state}. Simply text "STOP" at any time to unsubscribe.
         """
     return send_text(WELCOME_MSG, phone_number)
 
