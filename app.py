@@ -427,7 +427,8 @@ def paid():
     endpoint_secret = os.getenv('STRIPE_WEBHOOK_SECRET')
     event = None
     resp = jsonify(f"")
-
+    print("here")
+    print(request.body)
     try:
         event = stripe.Webhook.construct_event(
         payload, sig_header, endpoint_secret
@@ -440,7 +441,9 @@ def paid():
         # Invalid signature
         resp.status_Code = 400
         return resp
-
+    print("now here")
+    print(event)
+    print(event['type'])
     if event['type'] == 'checkout.session.async_payment_succeeded':
         session = event['data']['object']
         print(session)
