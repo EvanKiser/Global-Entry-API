@@ -423,16 +423,17 @@ def stop_texts():
 @app.route('/paid', methods = ['POST']) 
 def paid():
     payload = request.data
-    sig_header = request.META['HTTP_STRIPE_SIGNATURE']
+    print(payload)
+    # sig_header = request.META['HTTP_STRIPE_SIGNATURE']
     endpoint_secret = os.getenv('STRIPE_WEBHOOK_SECRET')
-    event = None
     resp = jsonify(f"")
     print("here")
-    print(request.data)
     try:
-        event = stripe.Webhook.construct_event(
-        payload, sig_header, endpoint_secret
-        )
+        event = json.loads(payload) 
+        print(event)
+        # event = stripe.Webhook.construct_event(
+        # payload, sig_header, endpoint_secret
+        # )
     except ValueError as e:
         # Invalid payload
         resp.status_Code = 400
