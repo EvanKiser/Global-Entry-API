@@ -80,12 +80,10 @@ def stop_message_to_me(start_date, phone, email):
 
 
 def map_id_to_location(location_id):
-    print("here")
     with open('locations.json') as locations_path:
         locations = json.load(locations_path)
     for location in locations:
         if location["id"] == int(location_id):
-            print(location["id"], location["city"], location["state"])
             return location["city"], location["state"]
 
 def map_location_names_to_ids(location_name):
@@ -230,7 +228,6 @@ class User(db.Model):
 
 @app.route('/user', methods = ['POST'])
 def add_user():
-    print(request.form)
     if request.form:
         data = request.form
         if request.method == 'POST':
@@ -301,7 +298,6 @@ def add_user():
         resp = jsonify("cool email")
         resp.status_code = 200
         return resp
-    print("there")
 
 @app.route('/user', methods = ['GET'])
 def get_current_users():
