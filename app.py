@@ -228,7 +228,7 @@ def add_user():
             email = data['email']
             phone = data['phone']
             location = data['location']
-            locations = [map_location_names_to_ids(location)]
+            locations = [location]
             curr_users = User.query.filter(User.end_date > datetime.now())
             for user in curr_users:
                 if user.phone == phone:

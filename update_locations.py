@@ -3,7 +3,7 @@ if __name__ == '__main__':
     with open('locations.json') as locations_path:
         locations = json.load(locations_path)
     for location in locations:
-        print(location["display_name"])
+        print(f"{location['display_name']}={location['id']}")
 
     # locations = sorted(locations, key=lambda x: x["city"])
     # new_locations = []
