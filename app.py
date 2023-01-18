@@ -78,13 +78,21 @@ def stop_message_to_me(start_date, phone, email):
         """
     return send_text(STOP_MSG_TO_ME, "+15016504390")
 
-def map_location_names_to_ids(location_name):
+
+def map_id_to_location(location_id):
     print("here")
     with open('locations.json') as locations_path:
         locations = json.load(locations_path)
     for location in locations:
-        if location["display_name"] == location_name:
+        if location["id"] == location_id:
             print(location["id"], location["city"], location["state"])
+            return location["city"], location["state"]
+
+def map_location_names_to_ids(location_name):
+    with open('locations.json') as locations_path:
+        locations = json.load(locations_path)
+    for location in locations:
+        if location["id"] == location_name:
             return location["id"], location["city"], location["state"]
 
 app = Flask(__name__)
@@ -239,7 +247,7 @@ def add_user():
                     resp.status_code = 400
                     return resp
             try:
-                id, city, state = map_location_names_to_ids(location)
+                city, state = map_id_to_location(location)
 
                 send_welcome_message(phone, city, state, name)
             except:
