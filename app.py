@@ -84,7 +84,7 @@ def map_id_to_location(location_id):
     with open('locations.json') as locations_path:
         locations = json.load(locations_path)
     for location in locations:
-        if location["id"] == location_id:
+        if location["id"] == int(location_id):
             print(location["id"], location["city"], location["state"])
             return location["city"], location["state"]
 
@@ -238,7 +238,7 @@ def add_user():
             email = data['email']
             phone = data['phone']
             location = data['location']
-            locations = [location]
+            locations = [int(location)]
             curr_users = User.query.filter(User.end_date > datetime.now())
             for user in curr_users:
                 if user.phone == phone:
