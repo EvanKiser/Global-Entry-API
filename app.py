@@ -67,7 +67,7 @@ def duplicate_message(email, phone):
         """
     return send_text(DUPLICATE_PHONE_TEXT, "+15016504390")
 
-def sign_up_message_to_me(name, email, phone, location):
+def sign_up_message_to_me(name, email, phone, city, state):
     STOP_MSG_TO_ME = f"""
         User signed up. \n{name}, \n{email}, \n{phone}, \n{location}.
         """
@@ -256,7 +256,7 @@ def add_user():
         data = User(email, phone, locations)
         db.session.add(data)
         db.session.commit()
-        sign_up_message_to_me(name, email, phone, location)
+        sign_up_message_to_me(name, email, phone, city, state)
         resp = jsonify("user created successfully")
         resp.status_code = 200
         return resp
