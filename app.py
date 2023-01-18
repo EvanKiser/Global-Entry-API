@@ -423,17 +423,9 @@ def stop_texts():
 @app.route('/paid', methods = ['POST']) 
 def paid():
     payload = request.data
-    print(payload)
-    # sig_header = request.META['HTTP_STRIPE_SIGNATURE']
-    endpoint_secret = os.getenv('STRIPE_WEBHOOK_SECRET')
     resp = jsonify(f"")
-    print("here")
     try:
         event = json.loads(payload) 
-        print(event)
-        # event = stripe.Webhook.construct_event(
-        # payload, sig_header, endpoint_secret
-        # )
     except ValueError as e:
         # Invalid payload
         resp.status_Code = 400
@@ -442,13 +434,10 @@ def paid():
         # Invalid signature
         resp.status_Code = 400
         return resp
-    print("now here")
-    print(event)
-    print(event['type'])
-    if event['type'] == 'checkout.session.async_payment_succeeded':
+    if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
-        print(session)
-        # Fulfill the purchase
+        client_reference_id = session['client_reference_id']
+        print(client_reference_id)
 
     resp = jsonify(f"")
     resp.status_Code = 200
