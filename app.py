@@ -260,45 +260,6 @@ def add_user():
         resp = jsonify("user created successfully")
         resp.status_code = 200
         return resp
-    elif request.json['data']:
-        data = request.json['data']
-        if request.method == 'POST':
-            # first_name = data['field:comp-la6ibvk5']
-            email = data['field:comp-la6fcw1i']
-            phone = data['field:comp-la6fcw2e2']
-            location0 = data['field:comp-la6fcw4h']
-            id, city, state = map_location_names_to_ids(location0)
-            locations = [map_location_names_to_ids(location0)]
-            if 'field:comp-la6gjwjv' in data and data['field:comp-la6gjwjv'] != 'None':
-                location1 = data['field:comp-la6gjwjv']
-                id, _, _ = map_location_names_to_ids(location1)
-                locations.append(map_location_names_to_ids(location1))
-            if 'field:comp-la6gk26t' in data and data['field:comp-la6gk26t'] != 'None':
-                location2 = data['field:comp-la6gk26t']
-                id, _, _ = map_location_names_to_ids(location2)
-                locations.append(map_location_names_to_ids(location2))
-            curr_users = User.query.filter(User.end_date > datetime.now())
-            
-            for user in curr_users:
-                if user.phone == phone:
-                    duplicate_message(user.email, user.phone)
-                    resp = jsonify("Currently we have another user with this phone number. Please use a different phone number.")
-                    resp.status_code = 400
-                    return resp
-            try:
-                send_welcome_message(phone, city, state)
-            except:
-                print("phone number seems incorrect")
-                resp = jsonify("phone number seems incorrect")
-                resp.status_code = 400
-                return resp
-
-            data = User(email, phone, locations)
-            db.session.add(data)
-            db.session.commit()
-        resp = jsonify("cool email")
-        resp.status_code = 200
-        return resp
 
 @app.route('/user', methods = ['GET'])
 def get_current_users():
@@ -439,7 +400,6 @@ def __init__(self, user_id, amount_cents, location_id):
 
 @app.route('/paid', methods = ['GET'])
 def get_current_paid():
-    print("here")
     if request.method == 'GET':
         current_paid = Paid.query.filter(Paid.end_date > datetime.now())
         paid_user_json = [
@@ -511,13 +471,14 @@ def paid():
 @app.route('/paid_test', methods = ['POST'])
 def add_paid_user():
     if request.method == 'POST':
+        print(request.json)
         user_id = request.json['user_id']
-        location = request.json['location']
+        location_id = request.json['location_id']
         amount_cents = request.json['amount_cents']
-        data = Paid(user_id, location, amount_cents)
+        data = Paid(user_id, amount_cents, location_id)
         db.session.add(data)
         db.session.commit()
-        resp = jsonify("user created successfully")
+        resp = jsonify("user added to paid table successfully")
         resp.status_code = 200
         return resp
 
