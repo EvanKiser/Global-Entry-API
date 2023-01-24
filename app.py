@@ -460,18 +460,19 @@ def __init__(self, user_id, amount_cents, location_id):
     self.end_date = self.start_date + timedelta(days=7)
 
 @app.route('/paid', methods = ['POST'])
-def add_paid_user(id):
+def add_paid_user():
     if request.method == 'POST':
+        user_id = request.json['user_id']
         location = request.json['location']
         amount_cents = request.json['amount_cents']
-        data = Paid(id, location, amount_cents)
+        data = Paid(user_id, location, amount_cents)
         db.session.add(data)
         db.session.commit()
         resp = jsonify("user created successfully")
         resp.status_code = 200
         return resp
 
-@app.route('/paid', methods = ['DELETE'])
+@app.route('/paid/<id>', methods = ['DELETE'])
 def delete_paid_user(id):
     if request.method == 'DELETE':
         user = Paid.query.get(id)
