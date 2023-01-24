@@ -442,6 +442,44 @@ def paid():
     resp = jsonify(f"")
     resp.status_Code = 200
     return resp
+
+##### PAID OPERATIONS #####
+ 
+class Paid(db.Model):
+    __tablename__ = 'paid'
+    user_id = db.Column(db.Integer, primary_key=True)
+    location_id = db.Column(db.Integer)
+    amount_cents = db.Column(db.String(200))
+    paid_date = db.Column(db.DateTime)
+    end_date = db.Column(db.DateTime)
+
+def __init__(self, user_id, amount_cents, location_id):
+    self.user_id = user_id
+    self.amount_cents = amount_cents
+    self.paid_date = datetime.now()
+    self.end_date = self.start_date + timedelta(days=7)
+
+@app.route('/paid', methods = ['POST'])
+def add_paid_user(id):
+    if request.method == 'POST':
+        location = request.json['location']
+        amount_cents = request.json['amount_cents']
+        data = Paid(id, location, amount_cents)
+        db.session.add(data)
+        db.session.commit()
+        resp = jsonify("user created successfully")
+        resp.status_code = 200
+        return resp
+
+@app.route('/paid', methods = ['DELETE'])
+def delete_paid_user(id):
+    if request.method == 'DELETE':
+        user = Paid.query.get(id)
+        db.session.add(user)
+        db.session.commit()
+        resp = jsonify("user deleted successfully")
+        resp.status_code = 200
+        return resp
         
 if __name__ == '__main__':
     with app.app_context():
