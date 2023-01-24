@@ -386,6 +386,7 @@ def delete_user(id):
     return resp
 
 ##### STOP TEXTS #####
+
 @app.route('/stop', methods = ['POST']) 
 def stop_texts():
     data = request.values
@@ -419,7 +420,60 @@ def stop_texts():
     resp.status_Code = 200
     return resp
 
-##### STOP TEXTS #####
+##### PAID OPERATIONS #####
+ 
+class Paid(db.Model):
+    __tablename__ = 'paid'
+    user_id = db.Column(db.Integer, primary_key=True)
+    location_id = db.Column(db.Integer)
+    amount_cents = db.Column(db.String(200))
+    paid_date = db.Column(db.DateTime)
+    end_date = db.Column(db.DateTime)
+
+def __init__(self, user_id, amount_cents, location_id):
+    self.user_id = user_id
+    self.amount_cents = amount_cents
+    self.location_id = location_id
+    self.paid_date = datetime.now()
+    self.end_date = self.start_date + timedelta(days=7)
+
+@app.route('/paid', methods = ['GET'])
+def get_current_paid():
+    print("here")
+    if request.method == 'GET':
+        current_paid = Paid.query.filter(Paid.end_date > datetime.now())
+        paid_user_json = [
+            {   
+                "user_id": user.id,
+                "location": user.location,
+                "amount_cents": user.amount_cents,
+                "paid_date": user.paid_date,
+                'end_date': user.end_date, 
+            }
+            for user in current_paid
+        ]
+    resp = jsonify(paid_user_json)
+    resp.status_code = 200
+    return resp
+
+@app.route('/paid/all', methods = ['GET'])
+def all_paid():
+    if request.method == 'GET':
+        all_paid = Paid.query.all()
+        paid_users_json = [
+            {   
+                "user_id": user.id,
+                "location": user.location,
+                "amount_cents": user.amount_cents,
+                "paid_date": user.paid_date,
+                'end_date': user.end_date, 
+            }
+            for user in all_paid
+        ]
+    resp = jsonify(paid_users_json)
+    resp.status_code = 200
+    return resp
+
 @app.route('/paid', methods = ['POST']) 
 def paid():
     payload = request.data
@@ -436,30 +490,25 @@ def paid():
         return resp
     if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
-        client_reference_id = session['client_reference_id']
-        print(client_reference_id)
+        user_id = session['client_reference_id']
+        amount_cents = session['amount_total']
+        user = User.query.get(user_id)
+        user.start_date = datetime.now()
+        user.end_date = datetime.now() + timedelta(days=7)
+        location = user.locations[0]
+        paid = Paid(user_id, amount_cents, location)
+        db.session.add(paid)
+        db.session.add(user)
+        db.session.commit()
+        resp = jsonify(f"Successfully paid")
+        resp.status_Code = 200
+        return resp
 
-    resp = jsonify(f"")
-    resp.status_Code = 200
+    resp = jsonify(f"Something went wrong")
+    resp.status_Code = 400
     return resp
 
-##### PAID OPERATIONS #####
- 
-class Paid(db.Model):
-    __tablename__ = 'paid'
-    user_id = db.Column(db.Integer, primary_key=True)
-    location_id = db.Column(db.Integer)
-    amount_cents = db.Column(db.String(200))
-    paid_date = db.Column(db.DateTime)
-    end_date = db.Column(db.DateTime)
-
-def __init__(self, user_id, amount_cents, location_id):
-    self.user_id = user_id
-    self.amount_cents = amount_cents
-    self.paid_date = datetime.now()
-    self.end_date = self.start_date + timedelta(days=7)
-
-@app.route('/paid', methods = ['POST'])
+@app.route('/paid_test', methods = ['POST'])
 def add_paid_user():
     if request.method == 'POST':
         user_id = request.json['user_id']
@@ -481,6 +530,14 @@ def delete_paid_user(id):
         resp = jsonify("user deleted successfully")
         resp.status_code = 200
         return resp
+
+@app.route('/paid/count', methods = ['GET'])
+def count_paid_users():
+    if request.method == 'GET':
+        users = Paid.query.all()
+    resp = jsonify(len(users))
+    resp.status_code = 200
+    return resp
         
 if __name__ == '__main__':
     with app.app_context():
