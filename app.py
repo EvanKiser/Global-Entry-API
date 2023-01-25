@@ -79,6 +79,19 @@ def stop_message_to_me(start_date, phone, email):
         """
     return send_text(STOP_MSG_TO_ME, "+15016504390")
 
+def send_paid_message_to_user(name, phone_number, city, state):
+    PAID_MSG = f"""
+        Congrats {name}! You will now recieve texts about new Global Entry interviews in {city}, {state} for the next 7 days. 
+        Simply text "STOP" at any time to unsubscribe.
+        """
+    return send_text(PAID_MSG, phone_number)
+
+def send_paid_message_to_me(name, amount_cents, city, state):
+    PAID_MSG_TO_ME = f"""
+        User paid. \n{name}, \n{amount_cents} \n{city}, \n{state}.
+        """
+    return send_text(PAID_MSG_TO_ME, "+15016504390")
+
 
 def map_id_to_location(location_id):
     with open('locations.json') as locations_path:
@@ -246,7 +259,6 @@ def add_user():
                     return resp
             try:
                 city, state = map_id_to_location(location)
-
                 send_welcome_message(phone, city, state, name)
             except:
                 print("phone number seems incorrect")
@@ -462,6 +474,9 @@ def paid():
         db.session.commit()
         resp = jsonify(f"Successfully paid")
         resp.status_Code = 200
+        city, state = map_id_to_location(location_id)
+        send_paid_message_to_user(user.name, user.phone, city, state)
+        send_paid_message_to_me(user.name, user.phone, city, state)
         return resp
 
     resp = jsonify(f"Something went wrong")
