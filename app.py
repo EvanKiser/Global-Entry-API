@@ -100,13 +100,6 @@ def map_id_to_location(location_id):
         if location["id"] == int(location_id):
             return location["city"], location["state"]
 
-def map_location_names_to_ids(location_name):
-    with open('locations.json') as locations_path:
-        locations = json.load(locations_path)
-    for location in locations:
-        if location["id"] == location_name:
-            return location["id"], location["city"], location["state"]
-
 app = Flask(__name__)
 
 ENV = os.getenv("ENV")
