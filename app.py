@@ -455,7 +455,7 @@ def paid():
         return resp
     if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
-        user_id = session['client_reference_id']
+        user_id = session['client_reference_id'][1:-1]
         amount_cents = session['amount_total']
         user = User.query.get(user_id)
         user.start_date = datetime.now()
