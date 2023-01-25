@@ -455,8 +455,8 @@ def paid():
         user = User.query.get(user_id)
         user.start_date = datetime.now()
         user.end_date = datetime.now() + timedelta(days=7)
-        location = user.locations[0]
-        paid = Paid(user_id, amount_cents, location)
+        location_id = user.locations[0]
+        paid = Paid(user_id, amount_cents, location_id)
         db.session.add(paid)
         db.session.add(user)
         db.session.commit()
@@ -471,12 +471,15 @@ def paid():
 @app.route('/paid_test', methods = ['POST'])
 def add_paid_user():
     if request.method == 'POST':
-        print(request.json)
         user_id = request.json['user_id']
-        location_id = request.json['location_id']
         amount_cents = request.json['amount_cents']
-        data = Paid(user_id, amount_cents, location_id)
-        db.session.add(data)
+        user = User.query.get(user_id)
+        user.start_date = datetime.now()
+        user.end_date = datetime.now() + timedelta(days=7)
+        location_id = user.locations[0]
+        paid = Paid(user_id, amount_cents, int(location_id))
+        db.session.add(paid)
+        db.session.add(user)
         db.session.commit()
         resp = jsonify("user added to paid table successfully")
         resp.status_code = 200
