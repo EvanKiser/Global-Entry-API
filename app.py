@@ -391,12 +391,12 @@ class Paid(db.Model):
     paid_date = db.Column(db.DateTime)
     end_date = db.Column(db.DateTime)
 
-def __init__(self, user_id, amount_cents, location_id):
-    self.user_id = user_id
-    self.amount_cents = amount_cents
-    self.location_id = location_id
-    self.paid_date = datetime.now()
-    self.end_date = self.start_date + timedelta(days=7)
+    def __init__(self, user_id, amount_cents, location_id):
+        self.user_id = user_id
+        self.amount_cents = amount_cents
+        self.location_id = location_id
+        self.paid_date = datetime.now()
+        self.end_date = self.paid_date + timedelta(days=7)
 
 @app.route('/paid', methods = ['GET'])
 def get_current_paid():
@@ -404,8 +404,8 @@ def get_current_paid():
         current_paid = Paid.query.filter(Paid.end_date > datetime.now())
         paid_user_json = [
             {   
-                "user_id": user.id,
-                "location": user.location,
+                "user_id": user.user_id,
+                "location": user.location_id,
                 "amount_cents": user.amount_cents,
                 "paid_date": user.paid_date,
                 'end_date': user.end_date, 
@@ -422,8 +422,8 @@ def all_paid():
         all_paid = Paid.query.all()
         paid_users_json = [
             {   
-                "user_id": user.id,
-                "location": user.location,
+                "user_id": user.user_id,
+                "location": user.location_id,
                 "amount_cents": user.amount_cents,
                 "paid_date": user.paid_date,
                 'end_date': user.end_date, 
@@ -486,7 +486,7 @@ def add_paid_user():
 def delete_paid_user(id):
     if request.method == 'DELETE':
         user = Paid.query.get(id)
-        db.session.add(user)
+        db.session.delete(user)
         db.session.commit()
         resp = jsonify("user deleted successfully")
         resp.status_code = 200
