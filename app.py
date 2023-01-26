@@ -8,8 +8,8 @@ from mutable import MutableList
 from twilio.rest import Client
 import stripe
 
-stripe.api_key = os.getenv('STRIPE_SECRET')
 load_dotenv()
+stripe.api_key = os.getenv('STRIPE_SECRET')
 
 ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
 AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
