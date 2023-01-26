@@ -38,7 +38,7 @@ def create_checkout_session(user_id):
                 },
             ],
             mode='payment',
-            success_url='https://www.ttpscan.com',
+            success_url='https://www.globalentryscan.com',
             automatic_tax={'enabled': False},
         )
     except Exception as e:
