@@ -7,6 +7,8 @@ from twilio.rest import Client
 
 load_dotenv()
 
+PAID = os.getenv("PAID")
+
 API_URL = os.getenv("API_URL") if os.getenv("ENV") != 'dev' else 'http://127.0.0.1:5000'
 ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
 AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
@@ -45,6 +47,11 @@ def send_text_message(user_id, phone_number, message_content):
     add_sent_texts_to_db(user_id, message_content)
     return
 
+def get_paid_users_ids():
+    response = requests.get(f"{API_URL}/paid")
+    paid_users_dict = response.json()
+    return [paid_user["user_id"] for paid_user in paid_users_dict]
+
 def reset_texts_sent_per_day():
     requests.put(f"{API_URL}/user/reset")
 
@@ -59,6 +66,8 @@ if __name__ == '__main__':
     response = requests.get(f"{API_URL}/user")
     users_dict = response.json()
 
+    paid_users_ids = get_paid_users_ids()
+
     locations_dict = users_dict_to_locations_dict(users_dict)
     for location_id, users in locations_dict.items():
         new_appointments = check_for_appointments(location_id)
@@ -67,8 +76,9 @@ if __name__ == '__main__':
             for appointment in new_appointments:
                 message_content = f"New Global Entry Appointment Available in {location.city}, {location.state} on {appointment.timestamp}"
                 for user in users:
-                    if user.phone_number == '5016504390' and user.texts_sent_today > 1:
-                        continue
+                    # Only send a text if the user hasn't sent 15 texts today and if the user hasn't already been sent this text.
                     if (user.texts_sent_today < 15) and (message_content not in user.texts_sent):
-                        send_text_message(user.id, user.phone_number, message_content)
-                        user.texts_sent_today += 1
+                        # If the user is a paid user or we are on free mode, send the text.
+                        if (PAID == 'True' and user.id in paid_users_ids) or PAID != 'True':
+                            send_text_message(user.id, user.phone_number, message_content)
+                            user.texts_sent_today += 1

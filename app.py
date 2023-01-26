@@ -14,6 +14,7 @@ load_dotenv()
 ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
 AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
 TWILIO_PHONE_NUMBER = os.getenv('TWILIO_PHONE_NUMBER')
+PAID = os.getenv('PAID')
 client = Client(ACCOUNT_SID, AUTH_TOKEN)
 
 def send_text(message_content, phone_number):
@@ -45,15 +46,12 @@ def create_checkout_session(user_id):
 
     return checkout_session.url
 
-def send_checkout_link(user_id, num_texts_sent, phone_number):
-    print(num_texts_sent, phone_number)
-    if num_texts_sent == 1 and phone_number == "5016504390":
-        checkout_url = create_checkout_session(user_id)
-        print(checkout_url)
-        CHECKOUT_MSG = f"""
-            This concludes your free trial. If you would like to continue using this service complete checkout here. {checkout_url}
-            """
-        return send_text(CHECKOUT_MSG, phone_number)
+def send_checkout_link(user_id, phone_number):
+    checkout_url = create_checkout_session(user_id)
+    CHECKOUT_MSG = f"""
+        This concludes your free trial. Sign up here to continue using our serivce for the next 7 days! {checkout_url}
+        """
+    return send_text(CHECKOUT_MSG, phone_number)
 
 def send_welcome_message(phone_number, city, state, name=""):
     WELCOME_MSG = f"""
@@ -322,8 +320,8 @@ def update_user(id):
         user = User.query.get(id)
         user.texts_sent.append(new_text)
         user.texts_sent_today += 1
-        print(user.id, len(user.texts_sent), user.phone)
-        send_checkout_link(user.id, len(user.texts_sent), user.phone)
+        if PAID == 'True' and len(user.texts_sent) == 5:
+            send_checkout_link(user.id, user.phone)
         db.session.commit()
     resp = jsonify(f"texts sent updated")
     resp.status_Code = 200
