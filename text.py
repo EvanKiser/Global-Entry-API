@@ -79,6 +79,6 @@ if __name__ == '__main__':
                     # Only send a text if the user hasn't sent 15 texts today and if the user hasn't already been sent this text.
                     if (user.texts_sent_today < 15) and (message_content not in user.texts_sent):
                         # If the user is a paid user or we are on free mode, send the text.
-                        if (PAID == 'True' and user.id in paid_users_ids) or PAID != 'True':
+                        if (PAID == 'True' and user.id in paid_users_ids) or PAID != 'True' or len(user.texts_sent) < 5:
                             send_text_message(user.id, user.phone_number, message_content)
                             user.texts_sent_today += 1
