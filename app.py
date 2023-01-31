@@ -46,6 +46,12 @@ def create_checkout_session(user_id):
 
     return checkout_session.url
 
+def send_checkout_link_message_to_me(user_id, phone_number):
+    CHECKOUT_MSG = f"""
+        User {user_id} checkout link sent {phone_number}
+        """
+    return send_text(CHECKOUT_MSG, "+15016504390")
+
 def send_checkout_link(user_id, phone_number):
     checkout_url = create_checkout_session(user_id)
     CHECKOUT_MSG = f"""
@@ -321,6 +327,7 @@ def update_user(id):
         user.texts_sent.append(new_text)
         user.texts_sent_today += 1
         if PAID == 'True' and len(user.texts_sent) == 5:
+            send_checkout_link_message_to_me(user.id, user.phone)
             send_checkout_link(user.id, user.phone)
         db.session.commit()
     resp = jsonify(f"texts sent updated")
