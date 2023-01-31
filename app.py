@@ -467,7 +467,6 @@ def paid():
         location_id = user.locations[0]
         paid = Paid(user_id, amount_cents, location_id)
         db.session.add(paid)
-        db.session.add(user)
         db.session.commit()
         resp = jsonify(f"Successfully paid")
         resp.status_Code = 200
