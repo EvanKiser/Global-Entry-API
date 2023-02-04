@@ -99,6 +99,12 @@ def send_paid_message_to_me(id, phone, amount_cents, city, state):
         """
     return send_text(PAID_MSG_TO_ME, "+15016504390")
 
+def send_joke_to_me(body, phone):
+    JOKE_MSG_TO_ME = f"""
+        New joke from. {phone}, \n{body}
+        """
+    return send_text(JOKE_MSG_TO_ME, "+15016504390")
+
 
 def map_id_to_location(location_id):
     with open('locations.json') as locations_path:
@@ -369,6 +375,7 @@ def stop_texts():
         body = data.get('Body', None).upper()
         print(body, phone)
         if body not in ["STOP", "STOPALL", "UNSUBSCRIBE", "CANCEL", "END", "QUIT"]:
+            send_joke_to_me(body, phone)
             resp = jsonify(f"Not a correct text body.")
             resp.status_Code = 400
             return resp
