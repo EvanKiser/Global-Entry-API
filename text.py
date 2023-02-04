@@ -13,6 +13,7 @@ API_URL = os.getenv("API_URL") if os.getenv("ENV") != 'dev' else 'http://127.0.0
 ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
 AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
 TWILIO_PHONE_NUMBER = os.getenv('TWILIO_PHONE_NUMBER')
+MAX_TEXTS_PER_DAY = int(os.getenv('MAX_TEXTS_PER_DAY'))
 client = Client(ACCOUNT_SID, AUTH_TOKEN)
 
 class User():
@@ -76,8 +77,8 @@ if __name__ == '__main__':
             for appointment in new_appointments:
                 message_content = f"New Global Entry Appointment Available in {location.city}, {location.state} on {appointment.timestamp}"
                 for user in users:
-                    # Only send a text if the user hasn't sent 15 texts today and if the user hasn't already been sent this text.
-                    if (user.texts_sent_today < 15) and (message_content not in user.texts_sent):
+                    # Only send a text if the user hasn't sent MAX_TEXTS_PER_DAY texts today and if the user hasn't already been sent this text.
+                    if (user.texts_sent_today < MAX_TEXTS_PER_DAY) and (message_content not in user.texts_sent):
                         # If the user is a paid user or we are on free mode, send the text.
                         if len(user.texts_sent) < 5 or (PAID == 'True' and user.id in paid_users_ids) or PAID != 'True':
                             send_text_message(user.id, user.phone_number, message_content)
