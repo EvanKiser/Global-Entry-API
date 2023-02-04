@@ -56,8 +56,9 @@ def send_checkout_link_message_to_me(user_id, phone_number):
 def send_checkout_link(user_id, phone_number):
     checkout_url = create_checkout_session(user_id)
     CHECKOUT_MSG = f"""
-        This concludes your free trial. Sign up here to continue using our serivce for the next 7 days! {checkout_url}
+        That is the end of your 5 free messages. Pay what you feel is fair here: {checkout_url} or text a joke to this number to continue receiving messages for free. It better be a good one!
         """
+    send_text("Sorry we have to do this but...", phone_number)
     return send_text(CHECKOUT_MSG, phone_number)
 
 def send_welcome_message(phone_number, city, state):
