@@ -32,8 +32,9 @@ def create_checkout_session(user_id):
             line_items=[
                 {
                     # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-                    'price': 'price_1MQ5VWIcbfJQY4bat1kPw3P0', #PROD
+                    # 'price': 'price_1MQ5VWIcbfJQY4bat1kPw3P0', #PROD $5
                     # 'price': 'price_1MRUqaIcbfJQY4baaOsS1rWx', #TEST
+                    'price': 'price_1MBsRUIcbfJQY4baGWEtwBCg', # PROD What you want
                     'quantity': 1,
                 },
             ],
@@ -59,12 +60,15 @@ def send_checkout_link(user_id, phone_number):
         """
     return send_text(CHECKOUT_MSG, phone_number)
 
-def send_welcome_message(phone_number, city, state, name=""):
+def send_welcome_message(phone_number, city, state):
     WELCOME_MSG = f"""
-        Hey {name}, you will now recieve texts about new Global Entry interviews in {city}, {state}. Simply text "STOP" at any time to unsubscribe.
+        While I wanted to keep this app free forever (fighting the good fight against our price gouging competitors), the reality is that maintaining software is quite expensive and yall were burning a hole in my pockets.
+\nTo that end, after you have receive five texts regarding new appointments in {city}, {state}, you will receive a checkout link. This link provides you with the option to pay an amount that you feel is reasonable (even as little as $1).
+\nAlternatively, you may share a joke with us by texting it to this number. If our council of expert comedians finds it to be entertaining, you may continue receiving notifications for free. Thank you for your understanding!
         """
-    return send_text(WELCOME_MSG, phone_number)
-
+    send_text(WELCOME_MSG, phone_number)
+    PS_MSG = f"""P.S. These appointments go fast, so if you see one you like, sign up on the website ASAP! Then text "STOP" to unsubscribe from these messages."""
+    send_text(PS_MSG, phone_number)
 def duplicate_message(email, phone):
     DUPLICATE_PHONE_TEXT = f"""
         User signed up with duplciate phone number, {phone}, and email, {email}.
