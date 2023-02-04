@@ -255,6 +255,10 @@ def add_user():
             name = data['name']
             email = data['email']
             phone = data['phone']
+            if phone == '6104728779':
+                resp = jsonify("Fuck the competition")
+                resp.status_code = 400
+                return resp
             location = data['location']
             locations = [int(location)]
             curr_users = User.query.filter(User.end_date > datetime.now())
