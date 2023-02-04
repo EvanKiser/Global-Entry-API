@@ -266,7 +266,7 @@ def add_user():
                     return resp
             try:
                 city, state = map_id_to_location(location)
-                send_welcome_message(phone, city, state, name)
+                send_welcome_message(phone, city, state)
             except:
                 print("phone number seems incorrect")
                 resp = jsonify("phone number seems incorrect")
