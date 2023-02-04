@@ -56,7 +56,7 @@ def send_checkout_link_message_to_me(user_id, phone_number):
 def send_checkout_link(user_id, phone_number):
     checkout_url = create_checkout_session(user_id)
     CHECKOUT_MSG = f"""
-        That is the end of your 5 free messages. Pay what you feel is fair here: {checkout_url} or text a joke to this number to continue receiving messages for free. It better be a good one!
+        That is the end of your 5 free messages. Pay what you feel is fair here or text a joke to this number to continue receiving messages for free. It better be a good one! {checkout_url}
         """
     send_text("Sorry we have to do this but...", phone_number)
     return send_text(CHECKOUT_MSG, phone_number)
@@ -70,6 +70,7 @@ def send_welcome_message(phone_number, city, state):
     send_text(WELCOME_MSG, phone_number)
     PS_MSG = f"""P.S. These appointments go fast, so if you see one you like, sign up on the website ASAP! Then text "STOP" to unsubscribe from these messages."""
     send_text(PS_MSG, phone_number)
+
 def duplicate_message(email, phone):
     DUPLICATE_PHONE_TEXT = f"""
         User signed up with duplciate phone number, {phone}, and email, {email}.
