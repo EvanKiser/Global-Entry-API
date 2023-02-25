@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import os
 import requests
 from twilio.rest import Client
+from twilio.base.exceptions import TwilioRestException
 
 load_dotenv()
 
@@ -39,13 +40,22 @@ def add_sent_texts_to_db(user_id, message_content):
 
 def send_text_message(user_id, phone_number, message_content):
     print(phone_number)
-    _ = client.messages \
-        .create(
-            body=message_content,
-            from_=TWILIO_PHONE_NUMBER,
-            to=phone_number
-        )
-    add_sent_texts_to_db(user_id, message_content)
+    try:
+        _ = client.messages \
+            .create(
+                body=message_content,
+                from_=TWILIO_PHONE_NUMBER,
+                to=phone_number
+            )
+        add_sent_texts_to_db(user_id, message_content)
+    except TwilioRestException:
+        requests.put(f"{API_URL}/unsub", json={})
+        _ = client.messages \
+            .create(
+                body=f"{user_id} unsubed due to TwilioRestException",
+                from_="+15016504390",
+                to=phone_number
+            )
     return
 
 def get_paid_users_ids():

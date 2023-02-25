@@ -56,7 +56,7 @@ def send_checkout_link_message_to_me(user_id, phone_number):
 def send_checkout_link(user_id, phone_number):
     checkout_url = create_checkout_session(user_id)
     CHECKOUT_MSG = f"""
-        That is the end of your 5 free messages. Pay what you feel is fair here or text a joke to 5016504390 to continue receiving messages for free. It better be a good one! {checkout_url}
+        That is the end of your 5 free messages. Pay what you feel is fair here or text a joke to this number to continue receiving messages for free. It better be a good one! {checkout_url}
         """
     send_text("Sorry we have to do this but...", phone_number)
     return send_text(CHECKOUT_MSG, phone_number)
@@ -335,6 +335,7 @@ def count_users():
     resp.status_code = 200
     return resp
 
+
 @app.route('/user/<id>', methods = ['PUT'])
 def update_user(id):
     new_text = request.json['text_sent']
@@ -373,13 +374,23 @@ def delete_user(id):
 
 ##### STOP TEXTS #####
 
+@app.route('/unsub/<id>', methods = ['POST']) 
+def unsub_users(id):
+    data = request.values
+    if request.method == 'POST':
+        user = User.query.get(id)
+        user.end_date = datetime.now()
+        db.session.commit()
+    resp = jsonify(f"user id: {user.id} unsubscribed")
+    resp.status_Code = 200
+    return resp
+
 @app.route('/stop', methods = ['POST']) 
 def stop_texts():
     data = request.values
     if request.method == 'POST':
         phone = data.get('From', None)
         body = data.get('Body', None).upper()
-        print(body, phone)
         if body not in ["STOP", "STOPALL", "UNSUBSCRIBE", "CANCEL", "END", "QUIT"]:
             send_joke_to_me(body, phone)
             resp = jsonify(f"Not a correct text body.")
