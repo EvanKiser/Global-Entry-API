@@ -267,7 +267,6 @@ def add_user():
                 city, state = map_id_to_location(location)
                 send_welcome_message(phone, city, state)
             except:
-                print("phone number seems incorrect")
                 resp = jsonify("phone number seems incorrect")
                 resp.status_code = 400
                 return resp
@@ -390,7 +389,6 @@ def stop_texts():
             resp.status_Code = 400
             return resp
         phone_number = '(' + phone[:2] + ') ' + phone[2:]
-        print(phone_number)
         users = User.query.filter(User.end_date > datetime.now())
         user = None
         found_users = []
@@ -399,7 +397,6 @@ def stop_texts():
                 found_users.append(u)
         if found_users == []:
             phone_number = phone[2:]
-            print(phone_number, " 2nd try")
             for u in users:
                 if u.phone == phone_number:
                     found_users.append(u)

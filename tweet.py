@@ -47,7 +47,6 @@ def send_tweet(location_id, timestamp):
         api.update_status(tweet_msg)
         logging.info(f"Tweeted: {tweet_msg}")
     except tweepy.errors.Forbidden as duplicate:
-        print("Duplicate")
         add_tweeted_appointment_to_db(location_id, timestamp)
         return False
     except Exception as e:

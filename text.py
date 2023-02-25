@@ -39,7 +39,6 @@ def add_sent_texts_to_db(user_id, message_content):
     requests.put(f"{API_URL}/user/{user_id}", json={'id': user_id,'text_sent': message_content})
 
 def send_text_message(user_id, phone_number, message_content):
-    print(phone_number)
     try:
         _ = client.messages \
             .create(
