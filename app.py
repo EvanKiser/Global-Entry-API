@@ -104,15 +104,9 @@ def send_joke_to_me(body, phone):
 def send_reminder_to_user(user_id, phone_number, city, state):
     checkout_url = create_checkout_session(user_id)
     REMINDER_MSG = f"""
-        Just a reminder that if you would like to continue receiving texts about new Global Entry interviews in {city}, {state}, you can pay what you feel is fair here: {PAID} 
+        Just a reminder that if you would like to continue receiving texts about new Global Entry interviews in {city}, {state}, you can pay what you feel is fair here: {checkout_url} 
         """
     return send_text(REMINDER_MSG, phone_number)
-
-def send_reminder_to_me(user_id, city, state):
-    REMINDER_MSG_TO_ME = f"""
-        User {user_id} reminder msg sent. \n{city}, \n{state}.
-        """
-    return send_text(REMINDER_MSG_TO_ME, "+15016504390")
 
 def map_id_to_location(location_id):
     with open('locations.json') as locations_path:
@@ -510,7 +504,6 @@ def paid():
         location_id = user.locations[0]
         city, state = map_id_to_location(location_id)
         send_reminder_to_user(user.id, user.phone, city, state)
-        send_reminder_to_me(user.id, city, state)
         return resp
 
     resp = jsonify(f"Something went wrong")
