@@ -52,8 +52,8 @@ def send_text_message(user_id, phone_number, message_content):
         _ = client.messages \
             .create(
                 body=f"{user_id} unsubed due to TwilioRestException",
-                from_="+15016504390",
-                to=phone_number
+                from_=TWILIO_PHONE_NUMBER,
+                to="+15016504390",
             )
     return
 
