@@ -50,7 +50,7 @@ def create_checkout_session(user_id):
 def send_checkout_link(user_id, phone_number):
     checkout_url = create_checkout_session(user_id)
     CHECKOUT_MSG = f"""
-        That is the end of your 5 free messages. Pay what you feel is fair here or text a joke to this number to continue receiving messages for free. It better be a good one! {checkout_url}
+        That is the end of your 3 free messages. Pay what you feel is fair here or text a joke 501-650-4390 to continue receiving messages for free. It better be a good one! {checkout_url}
         """
     send_text("Sorry we have to do this but...", phone_number)
     return send_text(CHECKOUT_MSG, phone_number)
@@ -58,24 +58,18 @@ def send_checkout_link(user_id, phone_number):
 def send_welcome_message(phone_number, city, state):
     WELCOME_MSG = f"""
         While I wanted to keep this app free forever (fighting the good fight against our price gouging competitors), the reality is that maintaining software is quite expensive and yall were burning a hole in my pockets.
-\nTo that end, after you have receive five texts regarding new appointments in {city}, {state}, you will receive a checkout link. This link provides you with the option to pay an amount that you feel is reasonable (even as little as $1).
+\nTo that end, after you have receive three texts regarding new appointments in {city}, {state}, you will receive a checkout link. This link provides you with the option to pay an amount that you feel is reasonable (even as little as $1).
 \nAlternatively, you may text us a joke. If our council of expert comedians finds it to be entertaining, you may continue receiving notifications for free. Thank you for your understanding!
         """
     send_text(WELCOME_MSG, phone_number)
     PS_MSG = f"""P.S. These appointments go fast, so if you see one you like, sign up on the website ASAP! Then text "STOP" to unsubscribe from these messages."""
     send_text(PS_MSG, phone_number)
 
-def duplicate_message(email, phone):
-    DUPLICATE_PHONE_TEXT = f"""
-        User signed up with duplciate phone number, {phone}, and email, {email}.
-        """
-    return send_text(DUPLICATE_PHONE_TEXT, "+15016504390")
-
 def sign_up_message_to_me(name, email, phone, city, state):
-    STOP_MSG_TO_ME = f"""
+    SIGN_UP_MSG_TO_ME = f"""
         User signed up. \n{name}, \n{email}, \n{phone}, \n{city}, \n{state}.
         """
-    return send_text(STOP_MSG_TO_ME, "+15016504390")
+    return send_text(SIGN_UP_MSG_TO_ME, "+15016504390")
 
 def stop_message_to_me(start_date, phone, email):
     STOP_MSG_TO_ME = f"""
@@ -265,7 +259,6 @@ def add_user():
             curr_users = User.query.filter(User.end_date > datetime.now())
             for user in curr_users:
                 if user.phone == phone:
-                    duplicate_message(user.email, user.phone)
                     resp = jsonify("Currently we have another user with this phone number. Please use a different phone number.")
                     resp.status_code = 400
                     return resp
@@ -342,7 +335,7 @@ def update_user(id):
         user = User.query.get(id)
         user.texts_sent.append(new_text)
         user.texts_sent_today += 1
-        if PAID == 'True' and len(user.texts_sent) == 5:
+        if PAID == 'True' and len(user.texts_sent) == 3:
             send_checkout_link(user.id, user.phone)
         db.session.commit()
     resp = jsonify(f"texts sent updated")
