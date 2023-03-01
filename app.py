@@ -367,11 +367,9 @@ def delete_user(id):
 
 @app.route('/unsub/<id>', methods = ['POST']) 
 def unsub_users(id):
-    data = request.values
-    if request.method == 'POST':
-        user = User.query.get(id)
-        user.end_date = datetime.now()
-        db.session.commit()
+    user = User.query.get(id)
+    user.end_date = datetime.now()
+    db.session.commit()
     resp = jsonify(f"user id: {user.id} unsubscribed")
     resp.status_Code = 200
     return resp
