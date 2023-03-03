@@ -370,6 +370,12 @@ def unsub_users(id):
     user = User.query.get(id)
     user.end_date = datetime.now()
     db.session.commit()
+    _ = client.messages \
+        .create(
+            body=f"{user_id} unsubed due to TwilioRestException",
+            from_=TWILIO_PHONE_NUMBER,
+            to="+15016504390",
+        )
     resp = jsonify(f"user id: {user.id} unsubscribed")
     resp.status_Code = 200
     return resp
