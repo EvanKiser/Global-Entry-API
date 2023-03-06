@@ -5,7 +5,9 @@ from flask_sqlalchemy import SQLAlchemy
 import json
 import os
 from mutable import MutableList
+import requests
 from twilio.rest import Client
+from twilio.base.exceptions import TwilioRestException
 import stripe
 
 load_dotenv()
@@ -15,15 +17,21 @@ ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
 AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
 TWILIO_PHONE_NUMBER = os.getenv('TWILIO_PHONE_NUMBER')
 PAID = os.getenv('PAID')
+API_URL = os.getenv("API_URL") if os.getenv("ENV") != 'dev' else 'http://127.0.0.1:5000'
 client = Client(ACCOUNT_SID, AUTH_TOKEN)
 
-def send_text(message_content, phone_number):
-    return client.messages \
-        .create(
-            body=message_content,
-            from_=TWILIO_PHONE_NUMBER,
-            to=phone_number
-        )
+def send_text(message_content, phone_number, user_id=None):
+    try:
+        client.messages \
+            .create(
+                body=message_content,
+                from_=TWILIO_PHONE_NUMBER,
+                to=phone_number
+            )
+    except TwilioRestException:
+        if user_id:
+            requests.put(f"{API_URL}/unsub/{user_id}", json={})
+    return
 
 def create_checkout_session(user_id):
     try:
@@ -52,8 +60,8 @@ def send_checkout_link(user_id, phone_number):
     CHECKOUT_MSG = f"""
         That is the end of your 3 free messages. Pay what you feel is fair here or text a joke 501-650-4390 to continue receiving messages for free. It better be a good one! {checkout_url}
         """
-    send_text("Sorry we have to do this but...", phone_number)
-    return send_text(CHECKOUT_MSG, phone_number)
+    send_text("Sorry we have to do this but...", phone_number, user_id)
+    return send_text(CHECKOUT_MSG, phone_number, user_id)
 
 def send_welcome_message(phone_number, city, state):
     WELCOME_MSG = f"""
@@ -100,7 +108,7 @@ def send_reminder_to_user(user_id, phone_number, city, state):
     REMINDER_MSG = f"""
         Just a reminder that if you would like to continue receiving texts about new Global Entry interviews in {city}, {state}, you can pay what you feel is fair here: {checkout_url} 
         """
-    return send_text(REMINDER_MSG, phone_number)
+    return send_text(REMINDER_MSG, phone_number, user_id)
 
 def map_id_to_location(location_id):
     with open('locations.json') as locations_path:
