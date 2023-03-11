@@ -492,9 +492,9 @@ def paid():
         session = event['data']['object']
         user_id = session['client_reference_id'][1:-1]
         user = User.query.get(user_id)
+        print(user.phone)
         location_id = user.locations[0]
         city, state = map_id_to_location(location_id)
-        print(user.phone)
         send_reminder_to_user(user.id, user.phone, city, state)
         return resp
 
