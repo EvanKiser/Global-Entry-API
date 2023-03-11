@@ -37,7 +37,6 @@ def get_appointments(location_id, delta_weeks=4):
 
 def get_location_data(location_id):
     location = requests.get(f"{API_URL}/location/{location_id}").json()
-    print(f"{API_URL}/location/{location_id}")
     return Location(location['id'], 
                     location['name'],
                     location['code'], 
