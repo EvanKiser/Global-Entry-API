@@ -372,7 +372,7 @@ def unsub_users(id):
     db.session.commit()
     _ = client.messages \
         .create(
-            body=f"{id} unsubed due to TwilioRestException",
+            body=f"{user_id} unsubed due to TwilioRestException",
             from_=TWILIO_PHONE_NUMBER,
             to="+15016504390",
         )
