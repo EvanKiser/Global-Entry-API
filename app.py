@@ -494,6 +494,7 @@ def paid():
         user = User.query.get(user_id)
         location_id = user.locations[0]
         city, state = map_id_to_location(location_id)
+        print(user.phone)
         send_reminder_to_user(user.id, user.phone, city, state)
         return resp
 
