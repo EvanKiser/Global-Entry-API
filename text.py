@@ -50,7 +50,7 @@ def send_text_message(user_id, phone_number, message_content):
         add_sent_texts_to_db(user_id, message_content)
     except TwilioRestException:
         print(f"here, {user_id}")
-        requests.put(f"{API_URL}/unsub/{user_id}", json={})
+        requests.post(f"{API_URL}/unsub/{user_id}", json={})
     return
 
 def get_paid_users_ids():
