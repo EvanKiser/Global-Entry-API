@@ -48,7 +48,7 @@ def send_text_message(user_id, phone_number, message_content):
             )
         add_sent_texts_to_db(user_id, message_content)
     except TwilioRestException:
-        requests.put(f"{API_URL}/unsub", json={})
+        requests.put(f"{API_URL}/unsub/{user_id}", json={})
         _ = client.messages \
             .create(
                 body=f"{user_id} unsubed due to TwilioRestException",
