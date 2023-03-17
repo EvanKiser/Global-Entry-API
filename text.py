@@ -49,7 +49,6 @@ def send_text_message(user_id, phone_number, message_content):
             )
         add_sent_texts_to_db(user_id, message_content)
     except TwilioRestException:
-        print(f"here, {user_id}")
         requests.post(f"{API_URL}/unsub/{user_id}", json={})
     return
 
@@ -86,7 +85,6 @@ if __name__ == '__main__':
                     if (user.texts_sent_today < MAX_TEXTS_PER_DAY) and (message_content not in user.texts_sent):
                         # If the user is a paid user or we are on free mode, send the text.
                         if len(user.texts_sent) < 5 or (PAID == 'True' and user.id in paid_users_ids) or PAID != 'True':
-                            print(user.id, user.end_date)
                             if datetime.strptime(user.end_date, '%a, %d %b %Y %H:%M:%S %Z') > datetime.now():
                                 send_text_message(user.id, user.phone_number, message_content)
                                 user.texts_sent_today += 1
