@@ -18,8 +18,9 @@ MAX_TEXTS_PER_DAY = int(os.getenv('MAX_TEXTS_PER_DAY'))
 client = Client(ACCOUNT_SID, AUTH_TOKEN)
 
 class User():
-    def __init__(self, id, phone_number, texts_sent, texts_sent_today):
+    def __init__(self, id, end_date, phone_number, texts_sent, texts_sent_today):
         self.id = id
+        self.end_date = end_date
         self.phone_number = phone_number
         self.texts_sent = texts_sent
         self.texts_sent_today = texts_sent_today
@@ -27,7 +28,7 @@ class User():
 def users_dict_to_locations_dict(users_dict):
     locations_dict = {}
     for user in users_dict:
-        user_obj = User(user["id"], user["phone"], user["texts_sent"], user["texts_sent_today"])
+        user_obj = User(user["id"], user["end_date"], user["phone"], user["texts_sent"], user["texts_sent_today"])
         for location in user["locations"]:
             if location in locations_dict:
                 locations_dict[location].add(user_obj)
