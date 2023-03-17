@@ -48,13 +48,15 @@ def send_text_message(user_id, phone_number, message_content):
             )
         add_sent_texts_to_db(user_id, message_content)
     except TwilioRestException:
-        requests.put(f"{API_URL}/unsub/{user_id}", json={})
-        _ = client.messages \
-            .create(
-                body=f"{user_id} unsubed due to TwilioRestException",
-                from_=TWILIO_PHONE_NUMBER,
-                to="+15016504390",
-            )
+        user = User.query.get(user_id)
+        if user and user.end_date > datetime.now():
+            requests.put(f"{API_URL}/unsub/{user_id}", json={})
+            _ = client.messages \
+                .create(
+                    body=f"{user_id} unsubed due to TwilioRestException",
+                    from_=TWILIO_PHONE_NUMBER,
+                    to="+15016504390",
+                )
     return
 
 def get_paid_users_ids():
