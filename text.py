@@ -86,6 +86,6 @@ if __name__ == '__main__':
                         # If the user is a paid user or we are on free mode, send the text.
                         if len(user.texts_sent) < 5 or (PAID == 'True' and user.id in paid_users_ids) or PAID != 'True':
                             print(user.id, user.end_date)
-                            if user.end_date > datetime.now():
+                            if datetime(user.end_date) > datetime.now():
                                 send_text_message(user.id, user.phone_number, message_content)
                                 user.texts_sent_today += 1
