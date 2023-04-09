@@ -58,7 +58,7 @@ def create_checkout_session(user_id):
 def send_checkout_link(user_id, phone_number):
     checkout_url = create_checkout_session(user_id)
     CHECKOUT_MSG = f"""
-        That is the end of your 3 free messages. Pay what you feel is fair here or text a joke 501-650-4390 to continue receiving messages for free. It better be a good one! {checkout_url}
+        That is the end of your 3 free messages. Pay what you feel is fair ($5 minimum) to continue receiving appointment notifications. {checkout_url}
         """
     send_text("Sorry we have to do this but...", phone_number, user_id)
     return send_text(CHECKOUT_MSG, phone_number, user_id)
@@ -66,8 +66,8 @@ def send_checkout_link(user_id, phone_number):
 def send_welcome_message(phone_number, city, state):
     WELCOME_MSG = f"""
         While I wanted to keep this app free forever (fighting the good fight against our price gouging competitors), the reality is that maintaining software is quite expensive and yall were burning a hole in my pockets.
-\nTo that end, after you have receive three texts regarding new appointments in {city}, {state}, you will receive a checkout link. This link provides you with the option to pay an amount that you feel is reasonable (even as little as $1).
-\nAlternatively, you may text us a joke. If our council of expert comedians finds it to be entertaining, you may continue receiving notifications for free. Thank you for your understanding!
+\nTo that end, after receiving 3 texts regarding new appointments in {city}, {state}, you will receive a checkout link. We ask that you pay an amount that you feel is fair (even as little as $5). to conitnue receiving 
+appointment notifications. Thank you for your understanding!
         """
     send_text(WELCOME_MSG, phone_number)
     PS_MSG = f"""P.S. These appointments go fast, so if you see one you like, sign up on the website ASAP! Then text "STOP" to unsubscribe from these messages."""
