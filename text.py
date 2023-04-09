@@ -18,8 +18,9 @@ MAX_TEXTS_PER_DAY = int(os.getenv('MAX_TEXTS_PER_DAY'))
 client = Client(ACCOUNT_SID, AUTH_TOKEN)
 
 class User():
-    def __init__(self, id, phone_number, texts_sent, texts_sent_today):
+    def __init__(self, id, end_date, phone_number, texts_sent, texts_sent_today):
         self.id = id
+        self.end_date = end_date
         self.phone_number = phone_number
         self.texts_sent = texts_sent
         self.texts_sent_today = texts_sent_today
@@ -27,7 +28,7 @@ class User():
 def users_dict_to_locations_dict(users_dict):
     locations_dict = {}
     for user in users_dict:
-        user_obj = User(user["id"], user["phone"], user["texts_sent"], user["texts_sent_today"])
+        user_obj = User(user["id"], user["end_date"], user["phone"], user["texts_sent"], user["texts_sent_today"])
         for location in user["locations"]:
             if location in locations_dict:
                 locations_dict[location].add(user_obj)
@@ -48,7 +49,7 @@ def send_text_message(user_id, phone_number, message_content):
             )
         add_sent_texts_to_db(user_id, message_content)
     except TwilioRestException:
-        requests.put(f"{API_URL}/unsub/{user_id}", json={})
+        requests.post(f"{API_URL}/unsub/{user_id}", json={})
     return
 
 def get_paid_users_ids():
@@ -84,5 +85,6 @@ if __name__ == '__main__':
                     if (user.texts_sent_today < MAX_TEXTS_PER_DAY) and (message_content not in user.texts_sent):
                         # If the user is a paid user or we are on free mode, send the text.
                         if len(user.texts_sent) < 5 or (PAID == 'True' and user.id in paid_users_ids) or PAID != 'True':
-                            send_text_message(user.id, user.phone_number, message_content)
-                            user.texts_sent_today += 1
+                            if datetime.strptime(user.end_date, '%a, %d %b %Y %H:%M:%S %Z') > datetime.now():
+                                send_text_message(user.id, user.phone_number, message_content)
+                                user.texts_sent_today += 1
