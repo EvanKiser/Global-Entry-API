@@ -65,18 +65,6 @@ appointment notifications. Thank you for your understanding!
     PS_MSG = f"""P.S. These appointments go fast, so if you see one you like, sign up on the website ASAP! Then text "STOP" to unsubscribe from these messages."""
     send_text(PS_MSG, phone_number)
 
-def sign_up_message_to_me(name, email, phone, city, state):
-    SIGN_UP_MSG_TO_ME = f"""
-        User signed up. \n{name}, \n{email}, \n{phone}, \n{city}, \n{state}.
-        """
-    return send_text(SIGN_UP_MSG_TO_ME, "+15016504390")
-
-def stop_message_to_me(start_date, phone, email):
-    STOP_MSG_TO_ME = f"""
-        User stopped. Sign up date: {start_date},\n{phone},\n{email}.
-        """
-    return send_text(STOP_MSG_TO_ME, "+15016504390")
-
 def send_paid_message_to_user(phone_number, city, state):
     PAID_MSG = f"""
         Congrats! You will now recieve texts about new Global Entry interviews in {city}, {state} for the next 7 days! \nSimply text "STOP" at any time to unsubscribe.
@@ -88,12 +76,6 @@ def send_paid_message_to_me(id, phone, amount_cents, city, state):
         User paid. \n{id}, \n{phone}, \n{amount_cents} \n{city}, \n{state}.
         """
     return send_text(PAID_MSG_TO_ME, "+15016504390")
-
-def send_joke_to_me(body, phone):
-    JOKE_MSG_TO_ME = f"""
-        New joke from. {phone}, \n{body}
-        """
-    return send_text(JOKE_MSG_TO_ME, "+15016504390")
 
 def send_reminder_to_user(user_id, phone_number, city, state):
     checkout_url = create_checkout_session(user_id)
@@ -272,7 +254,6 @@ def add_user():
         data = User(email, phone, locations)
         db.session.add(data)
         db.session.commit()
-        sign_up_message_to_me(name, email, phone, city, state)
         resp = jsonify("user created successfully")
         resp.status_code = 200
         return resp
@@ -383,7 +364,6 @@ def stop_texts():
         phone = data.get('From', None)
         body = data.get('Body', None).upper()
         if body not in ["STOP", "STOPALL", "UNSUBSCRIBE", "CANCEL", "END", "QUIT"]:
-            send_joke_to_me(body, phone)
             resp = jsonify(f"Not a correct text body.")
             resp.status_Code = 400
             return resp
@@ -401,7 +381,6 @@ def stop_texts():
                     found_users.append(u)
         for user in found_users:
             user.end_date = datetime.now()
-            stop_message_to_me(user.start_date, user.phone, user.email)
         db.session.commit()
     resp = jsonify(f"user id: {user.id} no longer receving texts")
     resp.status_Code = 200
