@@ -30,11 +30,9 @@ def get_appointments(location_id, delta_weeks=4):
 
     try:
         results = requests.get(url).json()  # List of flat appointment objects
-    except requests.ConnectionError:
-        logging.exception('Could not connect to scheduler API')
+    except Exception as e:
+	logging.exception(e)
         return
-    except requests.exceptions.JSONDecodeError:
-        logging.exception('Could not connect to scheduler API')
     return results
 
 def get_location_data(location_id):
