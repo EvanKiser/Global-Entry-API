@@ -31,8 +31,7 @@ def get_appointments(location_id, delta_weeks=4):
     try:
         results = requests.get(url).json()  # List of flat appointment objects
     except Exception as e:
-	logging.exception(e)
-        return
+        print(f"Error: {e}")
     return results
 
 def get_location_data(location_id):
