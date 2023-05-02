@@ -49,8 +49,6 @@ for i in paid_dates:
 # Sort amounts_by_day by day
 amounts_by_day = dict(sorted(amounts_by_day.items()))
 
-print(sum_over_time)
-print(amounts_by_day)
 # Plot the data on a line graph
 plt.plot(list(sum_over_time.keys()), list(sum_over_time.values()), label='New Global Entry Memberships')
 plt.plot(list(amounts_by_day.keys()), list(amounts_by_day.values()), label='Amount Paid')
