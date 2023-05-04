@@ -32,7 +32,7 @@ paid_dates = [datetime.strptime(dp['paid_date'], '%a, %d %b %Y %H:%M:%S %Z') for
 # Calculate date from one month ago
 time_filter = datetime.now() - timedelta(days=time_filter_range_days)
 # Filter start_dates to only include dates from the last month
-paid_dates = [paid_date for paid_date in paid_dates if paid_date >= time_filter]
+paid_dates = [paid_date.date() for paid_date in paid_dates if paid_date >= time_filter]
 # Extract amount_cents values
 amount_cents = [int(dp['amount_cents']) for dp in data]
 # Sum amount_cents by paid_date
@@ -51,9 +51,9 @@ sums = list(sum_by_day.values())
 # Create line graph with two lines
 fig, ax = plt.subplots()
 # Plot data points by start date
-ax.plot(dates, counts, label='Data Points by Start Date')
+ax.bar(dates, counts, label='Data Points by Start Date')
 # Plot sums by paid date
-ax.plot(sum_dates, sums, label='Sum of Amount Cents by Paid Date')
+ax.bar(sum_dates, sums, label='Sum of Amount Cents by Paid Date')
 # Set x-axis label to "Date"
 ax.set_xlabel('Date')
 # Set y-axis label to "Count / Sum of Amount Cents"
