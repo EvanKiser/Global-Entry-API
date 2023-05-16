@@ -229,7 +229,6 @@ def add_user():
     if request.form:
         data = request.form
         if request.method == 'POST':
-            name = data['name']
             email = data['email']
             phone = data['phone']
             if phone == '6104728779':
