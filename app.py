@@ -456,6 +456,10 @@ def paid():
         session = event['data']['object']
         user_id = session['client_reference_id'][1:-1]
         amount_cents = session['amount_total']
+        if (amount_cents < 500):
+            resp = jsonify(f"Need more moolah beotch")
+            resp.status_Code = 400
+            return resp
         user = User.query.get(user_id)
         user.start_date = datetime.now()
         user.end_date = datetime.now() + timedelta(days=7)
