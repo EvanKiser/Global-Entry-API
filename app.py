@@ -67,7 +67,7 @@ appointment notifications. Thank you for your understanding!
 
 def send_paid_message_to_user(phone_number, city, state):
     PAID_MSG = f"""
-        Congrats! You will now recieve texts about new Global Entry interviews in {city}, {state} for the next 7 days! \nSimply text "STOP" at any time to unsubscribe.
+        Congrats! You will now receive texts about new Global Entry interviews in {city}, {state} for the next 7 days! \nSimply text "STOP" at any time to unsubscribe.
         """
     return send_text(PAID_MSG, phone_number)
 
