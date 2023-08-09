@@ -471,7 +471,6 @@ def paid():
         resp.status_Code = 200
         city, state = map_id_to_location(location_id)
         send_paid_message_to_user(user.phone, city, state)
-        send_paid_message_to_me(user.id, user.phone, amount_cents, city, state)
     if event['type'] == 'checkout.session.expired':
         session = event['data']['object']
         user_id = session['client_reference_id'][1:-1]
