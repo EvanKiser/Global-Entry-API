@@ -15,6 +15,7 @@ ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
 AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
 TWILIO_PHONE_NUMBER = os.getenv('TWILIO_PHONE_NUMBER')
 PAID = os.getenv('PAID')
+MIN_PAYMENT = os.get_env('MIN_PAYMENT')
 client = Client(ACCOUNT_SID, AUTH_TOKEN)
 
 def send_text(message_content, phone_number):
@@ -50,15 +51,15 @@ def create_checkout_session(user_id):
 def send_checkout_link(user_id, phone_number):
     checkout_url = create_checkout_session(user_id)
     CHECKOUT_MSG = f"""
-        That is the end of your 3 free messages. Pay what you feel is fair ($5 minimum) to continue receiving appointment notifications. {checkout_url}
+        That is the end of your 3 free messages. Pay what you feel is fair (${MIN_PAYMENT} minimum) to continue receiving appointment notifications. {checkout_url}
         """
     send_text("Sorry we have to do this but...", phone_number)
     return send_text(CHECKOUT_MSG, phone_number)
 
 def send_welcome_message(phone_number, city, state):
     WELCOME_MSG = f"""
-        While I wanted to keep this app free forever (fighting the good fight against our price gouging competitors), the reality is that maintaining software is quite expensive and yall were burning a hole in my pockets.
-\nTo that end, after receiving 3 texts regarding new appointments in {city}, {state}, you will receive a checkout link. We ask that you pay an amount that you feel is fair (even as little as $5). to conitnue receiving 
+        Thanks for using GlobalEntryScan.com! While I wanted to keep this app free forever (fighting the good fight against our price gouging competitors), the reality is that maintaining software is quite expensive and yall were burning a hole in my pockets.
+\nTo that end, after receiving 3 texts regarding new appointments in {city}, {state}, you will receive a checkout link. We ask that you pay an amount that you feel is fair (even as little as ${MIN_PAYMENT}). to conitnue receiving 
 appointment notifications. Thank you for your understanding!
         """
     send_text(WELCOME_MSG, phone_number)
@@ -456,7 +457,7 @@ def paid():
         session = event['data']['object']
         user_id = session['client_reference_id'][1:-1]
         amount_cents = session['amount_total']
-        if (amount_cents < 500):
+        if (amount_cents < int(MIN_PAYMENT)*100):
             resp = jsonify(f"Need more moolah beotch")
             resp.status_Code = 400
             return resp
