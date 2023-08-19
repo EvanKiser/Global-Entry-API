@@ -48,8 +48,10 @@ def send_tweet(location_id, timestamp):
     try:
         client.create_tweet(text=tweet_msg)
         logging.info(f"Tweeted: {tweet_msg}")
-    except tweepy.errors.Forbidden as duplicate:
+    except tweepy.errors.Forbidden:
         add_tweeted_appointment_to_db(location_id, timestamp)
+        logging.exception(e)
+        print(e)
         return False
     except Exception as e:
         logging.exception(e)
