@@ -34,17 +34,19 @@ def get_location_display_name(location_id):
             return location["display_name"]
 
 def send_tweet(location_id, timestamp):
-    auth = tweepy.OAuth1UserHandler(
-            API_KEY, API_KEY_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET
-        )
-    api = tweepy.API(auth, wait_on_rate_limit=True)
+    client = tweepy.Client(
+        consumer_key=API_KEY,
+        consumer_secret=API_KEY_SECRET,
+        access_token=ACCESS_TOKEN,
+        access_token_secret=ACCESS_TOKEN_SECRET,
+    )
 
     tweet_msg = NOTIF_MESSAGE.format(
         display_name=get_location_display_name(location_id), timestamp=timestamp
     )
 
     try:
-        api.update_status(tweet_msg)
+        client.create_tweet(text=tweet_msg)
         logging.info(f"Tweeted: {tweet_msg}")
     except tweepy.errors.Forbidden as duplicate:
         add_tweeted_appointment_to_db(location_id, timestamp)
