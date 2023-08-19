@@ -15,7 +15,7 @@ ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
 AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
 TWILIO_PHONE_NUMBER = os.getenv('TWILIO_PHONE_NUMBER')
 PAID = os.getenv('PAID')
-MIN_PAYMENT = os.get_env('MIN_PAYMENT')
+MIN_PAYMENT = os.getenv('MIN_PAYMENT')
 client = Client(ACCOUNT_SID, AUTH_TOKEN)
 
 def send_text(message_content, phone_number):
