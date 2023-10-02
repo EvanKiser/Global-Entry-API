@@ -33,9 +33,9 @@ def create_checkout_session(user_id):
             line_items=[
                 {
                     # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-                    # 'price': 'price_1MQ5VWIcbfJQY4bat1kPw3P0', #PROD $5
+                    'price': 'price_1MQ5VWIcbfJQY4bat1kPw3P0', #PROD $5
                     # 'price': 'price_1MRUqaIcbfJQY4baaOsS1rWx', #TEST
-                    'price': 'price_1MBsRUIcbfJQY4baGWEtwBCg', # PROD What you want
+                    # 'price': 'price_1MBsRUIcbfJQY4baGWEtwBCg', # PROD What you want
                     'quantity': 1,
                 },
             ],
@@ -51,16 +51,15 @@ def create_checkout_session(user_id):
 def send_checkout_link(user_id, phone_number):
     checkout_url = create_checkout_session(user_id)
     CHECKOUT_MSG = f"""
-        That is the end of your 3 free messages. Pay what you feel is fair (${MIN_PAYMENT} minimum) to continue receiving appointment notifications. {checkout_url}
+        That is the end of your 2 free messages. You can continue receiving appointment notifications for only $5 by completing this checkout link. {checkout_url}
         """
-    send_text("Sorry we have to do this but...", phone_number)
+    # send_text("Sorry we have to do this but...", phone_number)
     return send_text(CHECKOUT_MSG, phone_number)
 
 def send_welcome_message(phone_number, city, state):
     WELCOME_MSG = f"""
         Thanks for using GlobalEntryScan.com! While I wanted to keep this app free forever (fighting the good fight against our price gouging competitors), the reality is that maintaining software is quite expensive and yall were burning a hole in my pockets.
-\nTo that end, after receiving 3 texts regarding new appointments in {city}, {state}, you will receive a checkout link. We ask that you pay an amount that you feel is fair (even as little as ${MIN_PAYMENT}). to conitnue receiving 
-appointment notifications. Thank you for your understanding!
+\nTo that end, after receiving 2 texts regarding new appointments in {city}, {state}, you will receive a checkout link. Here, we ask that you pay $5 to continue receiving appointment notifications!
         """
     send_text(WELCOME_MSG, phone_number)
     PS_MSG = f"""P.S. These appointments go fast, so if you see one you like, sign up on the website ASAP! Then text "STOP" to unsubscribe from these messages."""
@@ -81,7 +80,7 @@ def send_paid_message_to_me(id, phone, amount_cents, city, state):
 def send_reminder_to_user(user_id, phone_number, city, state):
     checkout_url = create_checkout_session(user_id)
     REMINDER_MSG = f"""
-        Just a reminder that if you would like to continue receiving texts about new Global Entry interviews in {city}, {state}, you can pay what you feel is fair here: {checkout_url} 
+        Just a reminder that if you would like to continue receiving texts about new Global Entry interviews in {city}, {state}, you can pay $5 here: {checkout_url} 
         """
     return send_text(REMINDER_MSG, phone_number)
 
@@ -316,7 +315,7 @@ def update_user(id):
         user = User.query.get(id)
         user.texts_sent.append(new_text)
         user.texts_sent_today += 1
-        if PAID == 'True' and len(user.texts_sent) == 3:
+        if PAID == 'True' and len(user.texts_sent) == 2:
             send_checkout_link(user.id, user.phone)
         db.session.commit()
     resp = jsonify(f"texts sent updated")
