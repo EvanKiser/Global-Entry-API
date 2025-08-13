@@ -51,19 +51,21 @@ def send_tweet(location_id, timestamp, api_key, api_key_secret, access_token, ac
     except tweepy.errors.TooManyRequests as e:
         logging.warning(f"Rate limit reached when tweeting for location {location_id}: {e}")
         print(f"Rate limit reached. Skipping tweet for {location_id} at {timestamp}")
-        return False
+        return 'rate_limit'
     except tweepy.errors.Forbidden as e:
         add_tweeted_appointment_to_db(location_id, timestamp)
         logging.exception(e)
         print(e)
-        return False
+        return 'error'
     except Exception as e:
         logging.error(f"Unexpected error when tweeting for location {location_id}: {e}")
         print(f"Error sending tweet: {e}")
-        return False
-    return True
+        return 'error'
+    return 'success'
 
 if __name__ == '__main__':
+    rate_limit_hit = False
+    
     for i in range(4):
         if i == 0:
             API_KEY = os.getenv("TWITTER_API_KEY_1")
@@ -108,8 +110,24 @@ if __name__ == '__main__':
                 if date in past_appointments:
                     continue
                 timestamp = date.strftime(MESSAGE_TIME_FORMAT)
-                if send_tweet(location.id, timestamp, API_KEY, API_KEY_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET):
+                result = send_tweet(location.id, timestamp, API_KEY, API_KEY_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
+                
+                if result == 'rate_limit':
+                    logging.error(f"Rate limit reached for API key set {i + 1}. Shutting down gracefully.")
+                    print(f"Rate limit reached for API key set {i + 1}. Shutting down gracefully.")
+                    rate_limit_hit = True
+                    keep_running = False
+                    break
+                elif result == 'success':
                     add_tweeted_appointment_to_db(location.id, timestamp)
                     keep_running = False
                     break
+        
+        if rate_limit_hit:
+            break
+    
+    if rate_limit_hit:
+        logging.info("Script shutting down due to rate limit.")
+    else:
+        logging.info("Script completed successfully.")
         
