@@ -48,14 +48,19 @@ def send_tweet(location_id, timestamp, api_key, api_key_secret, access_token, ac
     try:
         client.create_tweet(text=tweet_msg)
         logging.info(f"Tweeted: {tweet_msg}")
-    except tweepy.errors.Forbidden:
+    except tweepy.errors.TooManyRequests as e:
+        logging.warning(f"Rate limit reached when tweeting for location {location_id}: {e}")
+        print(f"Rate limit reached. Skipping tweet for {location_id} at {timestamp}")
+        return False
+    except tweepy.errors.Forbidden as e:
         add_tweeted_appointment_to_db(location_id, timestamp)
         logging.exception(e)
         print(e)
         return False
     except Exception as e:
-        logging.exception(e)
-        sys.exit(1)
+        logging.error(f"Unexpected error when tweeting for location {location_id}: {e}")
+        print(f"Error sending tweet: {e}")
+        return False
     return True
 
 if __name__ == '__main__':
